@@ -4,7 +4,7 @@ Sub Initialize()
     GForm.Caption = "Líneas de Corte"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left, GForm.Top + 500, GForm.Width + 225, GForm.Height - 600
+    GForm.Move GForm.Left, GForm.Top + 500, GForm.Width - 775, GForm.Height - 600
 
     Set GrdLineasCorte = gForm.Controls.Add("AhoraOCX.cntGridUsuario", "GrdLineasCorte", GForm.Controls("PanMain"))
     With GrdLineasCorte
@@ -20,13 +20,11 @@ Sub Initialize()
         .AgregaColumna "Fecha", 1500, "Fecha", False, "", False, "dd/mm/yyyy"
         .AgregaColumna "Palets", 1500, "Palets", False, "", False, "#,##0.00", True
         .AgregaColumna "ResmasPorPalet", 1500, "Resmas/Palet", False, "", False, "#,##0.00", True
-        .AgregaColumna "@Resmas", 1500, "Resmas", True, "", True,  "#,##0.00", True
         .AgregaColumna "PaletsEnviados", 1500, "Palets enviados", False, "", False, "#,##0.00", True
         .AgregaColumna "PaletsPendientes", 1500, "Palets pendientes", False, "", False, "#,##0.00", True
         .AgregaColumna "NumEnvio", 800, "Nº Envío", False
-        .Campo("@Resmas").Sustitucion   = "SELECT @Palets * @ResmasPorPalet"
         .FROM = "PERS_Trabajos_Lineas_Corte"
-        .Move 210, 200, 10500, 4000 
+        .Move 210, 200, 9500, 4000 
         .Refresca = True
         .Visible = True
     End With

@@ -209,7 +209,7 @@ Sub Initialize()
         .Move 210, 3000, 2000, 300
         .NColumnas = 2
         .Necesario = False
-        .TabIndex = 1
+        .TabIndex = 9
         .TabStop = True
         .Visible = True  
     End With ' cboIdZona
@@ -266,7 +266,8 @@ Sub Initialize()
 End Sub ' Initialize
 
 Sub Show()
-    GForm.Controls("cboIdCliente").SetFocus
+    GForm.Controls("txtRefBobina").SetFocus
+    GForm.Controls("txtFechaEntrada").Text = CStr(Now())
 End Sub ' Show
 
 Sub Combo_AfterUpdate(aCombo)

@@ -66,7 +66,7 @@ Sub Initialize()
         .C1Anchura = 700
         .C1Nombre = "IdEstado" 
         .C1TipoDato = 2
-        .C2Anchura = 2000
+        .C2Anchura = 3000
         .C2Nombre = "Descrip"
         .C2TipoDato = 8
         .CaptionLink = True
@@ -433,10 +433,10 @@ Sub CargaObjeto()
         GForm.Controls("txtIdBobina").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdBobina), 0) + 1 AS NuevoCodigoBobina FROM Pers_Bobinas", "NuevoCodigoBobina")
         GForm.Controls("cboIdEstado") = 1 
         GForm.Controls("txtNumBobina").Text = 1
+        GForm.Controls("txtFechaEntrada").Text = CStr(Now())
     End If
     
     SetAllComboText()
-
 End Sub ' CargaObjeto()
 
 Sub Botonera_BeforeExecute(aBotonera, aBoton, aCancel)
