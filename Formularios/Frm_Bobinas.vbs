@@ -8,6 +8,9 @@ Sub Initialize()
     ' Tamaño del formulario
     GForm.Move GForm.Left, GForm.Top + 500, GForm.Width, GForm.Height - 2060
 
+    GForm.Botonera.ActivarScripts = True
+    GForm.Botonera.BotonAdd "Ver trabajo", "btnVerTrabajo", , 0, True, 123
+
     Set PnlDatos = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlDatos", GForm.Controls("PnlMain"))
     With PnlDatos 
         .Estilo = 2
@@ -460,6 +463,19 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
         GForm.Controls("txtIdBobina").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdBobina), 0) + 1 AS NuevoCodigoBobina FROM Pers_Bobinas", "NuevoCodigoBobina")
         GForm.Controls("cboIdEstado") = 1
         SetAllComboText()
+    ElseIf aBoton.Name = "btnVerTrabajo" Then
+    
+        If GForm.Controls("txtIdBobina").Text <> "" Then
+            Dim idTrabajo 
+            idTrabajo = GCN.DameValorCampo("SELECT IdTrabajo FROM PERS_Trabajos_Lineas_Bobinas WHERE IdBobina = " & GForm.Controls("txtIdBobina").Text)
+
+            If Len(CStr(idTrabajo)) > 0 Then
+                Set lObj = GCN.Obj.DameObjeto("Trabajos", "WHERE IdTrabajo = " & idTrabajo)
+                lObj.show, True
+            Else
+                GCN.Obj.ShowMsgBox("Esta bobina no está enlazada a ningún trabajo.")
+            End If
+        End If
     End If
 End Sub ' Botonera_AfterExecute
 
