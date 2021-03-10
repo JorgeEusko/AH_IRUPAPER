@@ -6,13 +6,7 @@ Sub Initialize()
     GForm.Caption = "Trabajo"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 8000, GForm.Height - 600
-    
-     With GForm.Botonera
-        .ActivarScripts = True
-        .BotonAdd "Ver Bobinas", "botVerBobinas", "", 0, False, 123
-        .BotonAdd "Ver Líneas de Corte", "botVerLineasCorte", "", 0, False, 123
-    End With ' Botonera
+    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 8000, GForm.Height
 
     Set PnlObservaciones = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlObservaciones", GForm.Controls("PnlMain"))
     With PnlObservaciones 
@@ -24,7 +18,7 @@ Sub Initialize()
     With lPersTab
         .AplicaEstilo
         .Visible = True
-        .Move 7200, 100, 8000, 1830 
+        .Move 7200, 100, 8000, 2175 
         .InsertItem 2, "Observaciones", PnlObservaciones.Hwnd, 1
     End With 
 
@@ -74,7 +68,7 @@ Sub Initialize()
         .ObjPOrigen = "Facturado"
         .Move 4390, 240, 1200, 280 
         .Visible = True
-    End With ' chkActivo
+    End With ' chkFacturado
 
     Set cboIdEstado = GForm.Controls.Add("AhoraOCX.ComboUsuario", "cboIdEstado", GForm.Controls("PnlMain"))
     With cboIdEstado
@@ -154,6 +148,46 @@ Sub Initialize()
         .Visible = True 
     End With ' txtCliente
 
+    Set cboIdDireccionEnvio = GForm.Controls.Add("AhoraOCX.ComboUsuario", "cboIdDireccionEnvio", GForm.Controls("PnlMain"))
+    With cboIdDireccionEnvio 
+        .AplicaEstilo
+        .ActivarScripts = True
+        .CActiva = 1
+        .CaptionControl = "Dir. Envio"
+        .C1Anchura = 1320
+        .C1Nombre = "IdContacto" 
+        .C1TipoDato = 8
+        .C2Anchura = 3570
+        .C2Nombre = "Direccion"
+        .C2TipoDato = 8
+        .CaptionLink = True
+        .CaptionVisible = True
+        .CaptionWidth = 700
+        .Descripcion = "Select IdContacto, Direccion, Nombre From Clientes_Contactos"
+        .Enabled = True
+        .Formato = "Sin decimales"
+        .ObjOrigen = "EObjeto"
+        .ObjPOrigen = "DireccionEnvio"
+        .Move 210, 1275, 2000, 300 
+        .NColumnas = 3
+        .Necesario = True
+        .TabIndex = 4
+        .TabStop = True
+        .TipoDato =  "Numeric"
+        .Visible = True  
+    End With ' cboIdDireccionEnvio
+
+    Set txtDireccionEnvio = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtDireccionEnvio", GForm.Controls("PnlMain"))
+    With txtDireccionEnvio
+        .AplicaEstilo      
+        .Enabled = False 
+        .Formato = "Mayusculas y Minusculas" 
+        .Move 2260, cboIdDireccionEnvio.Top, 4740, 300 
+        .Necesario = False
+        .TipoDato =  "String"
+        .Visible = True 
+    End With ' txtDireccionEnvio
+
     Set txtIdPedido = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtIdPedido", GForm.Controls("PnlMain"))
     With txtIdPedido
         .AplicaEstilo
@@ -164,7 +198,7 @@ Sub Initialize()
         .Formato = "Mayusculas y Minusculas"
         .ObjOrigen = "EObjeto"
         .ObjPOrigen = "IdPedidoCliente"
-        .Move 210, 1275, 6790, 300 
+        .Move 210, 1620, 6790, 300 
         .Necesario = False
         .TabIndex = 5
         .TabStop = True
@@ -182,7 +216,7 @@ Sub Initialize()
         .Formato = "Mayusculas y Minusculas"
         .ObjOrigen = "EObjeto"
         .ObjPOrigen = "IdPedidoClienteFinal"
-        .Move 210, 1620, 6790, 300 
+        .Move 210, 1965, 6790, 300 
         .Necesario = False
         .TabIndex = 6
         .TabStop = True
@@ -221,8 +255,7 @@ Sub Initialize()
         .AgregaColumna "Ancho", 900, "Ancho", False, "", False, "#,##0.00"
         .AgregaColumna "Largo", 900, "Largo", False, "", False, "#,##0.00"
         .AgregaColumna "Gramaje", 900, "Gramaje", False, "", False, "#,##0.00"
-        .AgregaColumna "Precio", 900, "Precio", True, "", False, "#,##0.00"
-        .AgregaColumna "CostePalet", 950, "Coste palet", True, "", False, "#,##0.00"
+        .AgregaColumna "IdArticuloPrecio", 1800, "Art. Precio", False, "SELECT IdArticulo, Descrip FROM Articulos", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"
         .AgregaColumna "IdEstado", 1300, "Estado", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados", False, "", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados"
         .AgregaColumna "Facturada", 850, "Facturado"
         .Campo("IdLinea").Default = "SELECT ISNULL(MAX(IdLinea), 0) + 1 FROM PERS_Trabajos_Lineas"
@@ -230,7 +263,7 @@ Sub Initialize()
         .FROM = "PERS_Trabajos_Lineas"
         .WHERE = "WHERE 1 = 0"
         .Refresca = True
-        .Move 210, 2200, 15000, 3000 
+        .Move 210, 2545, 15000, 3000 
     End With
     
     Set txtPesoResma = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtPesoResma", GForm.Controls("PnlMain"))
@@ -241,7 +274,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 210, 5400, 2000, 300
+        .Move 210, 5980, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtPesoResma
@@ -254,7 +287,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 2310, 5400, 2000, 300
+        .Move 2310, 5980, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtKilosTeoricos
@@ -267,7 +300,7 @@ Sub Initialize()
         .CaptionWidth = 800  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 4410 + 200, 5400, 1800, 300
+        .Move 4410 + 200, 5980, 1800, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtMerma
@@ -280,7 +313,7 @@ Sub Initialize()
         .CaptionWidth = 900  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 6510 + 100, 5400, 1900, 300
+        .Move 6510 + 100, 5980, 1900, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtPorcentajeMerma
@@ -293,7 +326,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Sin decimales" 
-        .Move 8610, 5400, 2000, 300
+        .Move 8610, 5980, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtBobinasUsadas
@@ -306,7 +339,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 10710, 5400, 2000, 300
+        .Move 10710, 5980, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtTotalPalets
@@ -319,7 +352,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 12810, 5400, 2000, 300
+        .Move 12810, 5980, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtTotalResmas
@@ -332,7 +365,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 210, 5745, 2000, 300
+        .Move 210, 6325, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtTotalPaletsEnviados
@@ -345,7 +378,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 2310, 5745, 2000, 300
+        .Move 2310, 6325, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtTotalPaletsPendientes
@@ -358,16 +391,12 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 4410, 5745, 2000, 300
+        .Move 4410, 6325, 2000, 300
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtKilosCortados
 
 End Sub ' Initialize
-
-' Sub Show()
-'     GForm.Controls("cboIdCliente").Focus()
-' End Sub ' Show
 
 Sub CargaObjeto()
 
@@ -384,39 +413,41 @@ Sub CargaObjeto()
         GForm.Controls("GrdTrabajoLineas").Refrescar
     End If
 
-    SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = "
     SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = "
+    SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = "
+    SetComboText "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM Clientes_Contactos WHERE IdContacto = "
 
 End Sub ' CargaObjeto
 
 Sub Combo_AfterUpdate(aCombo)     
     If aCombo.Name = "cboIdCliente" Then 
         SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = "
-    
     ElseIf  aCombo.Name = "cboIdEstado" Then
         SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = "
-    
-   End If
+    ElseIf  aCombo.Name = "cboIdDireccionEnvio" Then
+        SetComboText "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM Clientes_Contactos WHERE IdContacto = "
+    End If
 End Sub ' Combo_AfterUpdate
 
 Sub Botonera_AfterExecute(aBotonera, aBoton)
-
     Dim idTrabajo, idLinea
 
     If aBoton.Name = "botGuardar" Then
-
         GForm.Controls("GrdTrabajoLineas").Enabled = True
         GForm.Controls("GrdTrabajoLineas").Campo("IdTrabajo").Default = "SELECT IdTrabajo FROM Pers_Trabajos WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").Campo("IdLinea").Default = "SELECT ISNULL(MAX(IdLinea), 0) + 1 FROM PERS_Trabajos_Lineas  WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").WHERE = "WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
+    End If
+End Sub ' Botonera_AfterExecute
 
-    ElseIf aBoton.Name = "botVerBobinas" Then
-
+Sub Menu_AfterExecute(aMenu, aMenuItem)
+    If aMenuItem.Name = "mnuTiposTrabajo" Then
+        GetMenuMantenimiento "Estados de trabajo","PERS_Trabajos_Estados", "IdEstado", "Descrip"     
+    ElseIf aMenuItem.Name = "botVerBobinas" Then
         idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
         idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
 
         If idTrabajo <> "" And idLinea <> "" Then
-
             Set lFrm = gcn.AhoraProceso("NewfrmMantenimiento", False, GCN)
             lFrm.Form.NombreForm = "Frm_Bobinas_de_Lineas_de_Trabajo"
 
@@ -440,12 +471,11 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
             lFrm.form.Width = 6000
             lFrm.Form.Caption = "Bobinas de Lineas de Trabajo"
             lFrm.Carga, False, 4
-
         Else
-            MsgBox "No ha seleccionado ninguna línea de trabajo"
+            GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
         End If
 
-    ElseIf aBoton.Name = "botVerLineasCorte" Then
+    ElseIf aMenuItem.Name = "botVerLineasCorte" Then
 
         idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
         idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
@@ -457,15 +487,22 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
             lFrmGen.Carga "Frm_LineasCorte", GForm, True
 
         Else
-            MsgBox "No ha seleccionado ninguna línea de trabajo"
+            GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
         End If
+    ElseIf aMenuItem.Name = "botVerCostesEnvio" Then
 
-    End If
-End Sub ' Botonera_AfterExecute
+        idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
+        idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
 
-Sub Menu_AfterExecute(aMenu, aMenuItem)
-    If aMenuItem.Name = "mnuTiposTrabajo" Then
-        GetMenuMantenimiento "Estados de trabajo","PERS_Trabajos_Estados", "IdEstado", "Descrip" 
+        If idTrabajo <> "" And idLinea <> "" Then
+
+            Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
+            lFrmGen.Tag = CStr(idTrabajo) & "," & CStr(idLinea)
+            lFrmGen.Carga "Frm_CostesEnvio", GForm, True
+
+        Else
+            GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
+        End If
     End If
 End Sub ' Menu_AfterExecute
 

@@ -1,3 +1,5 @@
+' GCN.AhoraProceso "AhoraScripts.AbrirFrmGenerico", False, "FrmRecepcionBobinas", GCN.Sesion.MainForm, False
+
 Sub Initialize()
 
     ' Etiqueta superior
@@ -329,9 +331,9 @@ Sub CrearBobinas()
         params.Add IdFila
 
         If GCN.EjecutaStoreCol("PPERS_Recepcionar_Bobinas", params) Then
-            MsgBox("Bobinas creadas con éxito.")
+            GCN.Obj.ShowMsgBox("Bobinas creadas con éxito.")
         Else
-            MsgBox("Error al crear las bobinas.")
+            GCN.Obj.ShowMsgBox("Error al crear las bobinas.")
         End If
     End If
 End Sub ' CrearBobinas
