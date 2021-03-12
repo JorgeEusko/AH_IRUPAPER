@@ -15,7 +15,8 @@ SELECT
     TLCS.Total_Palets,
     TLCS.Total_Resmas,
     TLCS.Total_PaletsEnviados,
-    TLCS.Total_PaletsPendientes
+    TLCS.Total_PaletsPendientes,
+    TL.IdDoc
 FROM PERS_Trabajos_Lineas AS TL 
     JOIN VPers_Trabajos_Lineas_Bobinas_Utilizadas AS TLBU ON TL.IdTrabajo = TLBU.IdTrabajo AND TL.IdLinea = TLBU.IdLinea
     LEFT JOIN VPers_Trabajos_Lineas_KilosTeoricos AS TLK ON TL.IdTrabajo = TLK.IdTrabajo AND TL.IdLinea = TLK.IdLinea

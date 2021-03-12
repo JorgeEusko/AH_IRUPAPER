@@ -8,6 +8,11 @@ Sub Initialize()
     ' Tamaño del formulario
     GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 8000, GForm.Height
 
+    With GForm.Botonera
+        .ActivarScripts = True
+        .BotonAdd "Imprimir Etiquetas", "botImprimirEtiquetas", "", 0, False, 123
+    End With ' Botonera
+
     Set PnlObservaciones = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlObservaciones", GForm.Controls("PnlMain"))
     With PnlObservaciones 
         .Estilo = 2
@@ -250,13 +255,13 @@ Sub Initialize()
         .AgregaColumna "IdTrabajo", 0, "Código"
         .AgregaColumna "IdLinea", 600, "Línea"
         .AgregaColumna "RefTrabajoCliente", 1200, "Ref. Trabajo"
-        .AgregaColumna "IdArticulo", 3700, "Trabajo", False, "SELECT IdArticulo, Descrip FROM Articulos", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"        
+        .AgregaColumna "IdArticulo", 2900, "Trabajo", False, "SELECT IdArticulo, Descrip FROM Articulos", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"        
         .AgregaColumna "IdCalidad", 2200, "Calidad", False, "SELECT IdCalidad, Descrip FROM PERS_Tipos_Calidad_Papel", False, "", False, "SELECT IdCalidad, Descrip FROM PERS_Tipos_Calidad_Papel"
-        .AgregaColumna "Ancho", 900, "Ancho", False, "", False, "#,##0.00"
-        .AgregaColumna "Largo", 900, "Largo", False, "", False, "#,##0.00"
-        .AgregaColumna "Gramaje", 900, "Gramaje", False, "", False, "#,##0.00"
-        .AgregaColumna "IdArticuloPrecio", 1800, "Art. Precio", False, "SELECT IdArticulo, Descrip FROM Articulos", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"
-        .AgregaColumna "IdEstado", 1300, "Estado", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados", False, "", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados"
+        .AgregaColumna "Ancho", 1000, "Ancho (cm)", False, "", False, "#,##0.00"
+        .AgregaColumna "Largo", 1000, "Largo (cm)", False, "", False, "#,##0.00"
+        .AgregaColumna "Gramaje", 1350, "Gramaje (Gr/m2)", False, "", False, "#,##0.00"
+        .AgregaColumna "IdArticuloPrecio", 2000, "Art. Palet", False, "SELECT IdArticulo, Descrip FROM Articulos", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"
+        .AgregaColumna "IdEstado", 1200, "Estado", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados", False, "", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados"
         .AgregaColumna "Facturada", 850, "Facturado"
         .Campo("IdLinea").Default = "SELECT ISNULL(MAX(IdLinea), 0) + 1 FROM PERS_Trabajos_Lineas"
         .Campo("IdEstado").Default = "SELECT 1"
@@ -437,10 +442,25 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
         GForm.Controls("GrdTrabajoLineas").Campo("IdTrabajo").Default = "SELECT IdTrabajo FROM Pers_Trabajos WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").Campo("IdLinea").Default = "SELECT ISNULL(MAX(IdLinea), 0) + 1 FROM PERS_Trabajos_Lineas  WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").WHERE = "WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
+    ElseIf aBoton.Name = "botImprimirEtiquetas" Then
+        idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
+        idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
+
+        If idTrabajo <> "" And idLinea <> "" Then
+
+            Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
+            lFrmGen.Tag = CStr(idTrabajo) & "," & CStr(idLinea)
+            lFrmGen.Carga "Frm_Etiquetas", GForm, True
+
+        Else
+            GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
+        End If
     End If
 End Sub ' Botonera_AfterExecute
 
 Sub Menu_AfterExecute(aMenu, aMenuItem)
+    Dim idTrabajo, idLinea
+
     If aMenuItem.Name = "mnuTiposTrabajo" Then
         GetMenuMantenimiento "Estados de trabajo","PERS_Trabajos_Estados", "IdEstado", "Descrip"     
     ElseIf aMenuItem.Name = "botVerBobinas" Then
