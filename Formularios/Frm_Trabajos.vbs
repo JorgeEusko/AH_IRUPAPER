@@ -160,7 +160,7 @@ Sub Initialize()
         .CActiva = 1
         .CaptionControl = "Dir. Envio"
         .C1Anchura = 1320
-        .C1Nombre = "IdContacto" 
+        .C1Nombre = "CodigoAlt" 
         .C1TipoDato = 8
         .C2Anchura = 3570
         .C2Nombre = "Direccion"
@@ -168,7 +168,7 @@ Sub Initialize()
         .CaptionLink = True
         .CaptionVisible = True
         .CaptionWidth = 700
-        .Descripcion = "Select IdContacto, Direccion, Nombre From Clientes_Contactos"
+        .Descripcion = "Select CodigoAlt, Direccion From VPERS_Contactos"
         .Enabled = True
         .Formato = "Sin decimales"
         .ObjOrigen = "EObjeto"
@@ -418,19 +418,19 @@ Sub CargaObjeto()
         GForm.Controls("GrdTrabajoLineas").Refrescar
     End If
 
+    SetComboTextString "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = '"
     SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = "
-    SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = "
-    SetComboText "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM Clientes_Contactos WHERE IdContacto = "
+    SetComboTextString "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
 
 End Sub ' CargaObjeto
 
 Sub Combo_AfterUpdate(aCombo)     
     If aCombo.Name = "cboIdCliente" Then 
-        SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = "
+        SetComboTextString "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = '"
     ElseIf  aCombo.Name = "cboIdEstado" Then
         SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = "
     ElseIf  aCombo.Name = "cboIdDireccionEnvio" Then
-        SetComboText "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM Clientes_Contactos WHERE IdContacto = "
+        SetComboTextString "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
     End If
 End Sub ' Combo_AfterUpdate
 
@@ -571,6 +571,19 @@ Sub SetComboText(comboName, textName, sqlText)
     Dim comboValue
     comboValue = GForm.Controls(comboName).Value
     GForm.Controls(textName).Text = GCN.DameValorcampo(sqlText & comboValue)
+  Else
+    GForm.Controls(textName).Text = ""
+  End If
+
+End Sub
+
+' Jorge: Funcion para establecer la descripcion del valor de un combo
+Sub SetComboTextString(comboName, textName, sqlText)
+  
+  If Len(GForm.Controls(comboName).Value) > 0 Then
+    Dim comboValue
+    comboValue = GForm.Controls(comboName).Value
+    GForm.Controls(textName).Text = GCN.DameValorcampo(sqlText & comboValue & "'")
   Else
     GForm.Controls(textName).Text = ""
   End If

@@ -1,6 +1,7 @@
 CREATE OR ALTER PROCEDURE PPERS_Crear_Etiquetas_Palets
     @prm_IdTrabajo INT,
     @prm_IdLineaTrabajo INT,
+    @prm_IdLineaCorte INT,
     @prm_EtiquetaIni INT,
     @prm_EtiquetaFin INT
 AS
@@ -31,8 +32,8 @@ BEGIN
             @prm_IdLineaTrabajo,
             NULL,
             TL.IdCalidad,
-            TL.Ancho,
-            TL.Largo,
+            TL.AnchoPalet,
+            TL.LargoPalet,
             TL.Gramaje,
             TLR.Total_Resmas,
             TLR.KIlosTeoricos,
