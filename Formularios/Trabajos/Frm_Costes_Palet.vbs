@@ -160,6 +160,7 @@ Sub Show()
 
         GForm.Controls("txtArticuloPalet").Text = lResult("ArticuloPrecio")
         GForm.Controls("txtPrecio").Text = lResult("Precio")
+        GForm.Controls("txtPrecioMin").Text = lResult("PrecioArtMin")
         GForm.Controls("txtAncho").Text = lResult("Ancho")
         GForm.Controls("txtLargo").Text = lResult("Largo")
         GForm.Controls("txtSuperficie").Text = lResult("Superficie")
@@ -206,17 +207,6 @@ Sub Check_Click(aCheckBox)
         End If
     End If
 End Sub ' Check_Click
-
-Sub Botonera_AfterExecute(aBotonera, aBoton)
-     If GForm.Tag <> "" Then
-            Dim idTrabajo, idLinea
-            Set params = gcn.DameNewCollection
-
-            params = Split(GForm.Tag, ",")
-            idTrabajo = params(0)
-            idLinea = params(1)
-    End If
-End Sub ' Botonera_AfterExecute
 
 ' Jorge: Calcular costes
 Sub CalcularCostes()
