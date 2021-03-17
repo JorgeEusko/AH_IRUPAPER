@@ -9,7 +9,7 @@ BEGIN
 		@v_RefBobina VARCHAR(255),
 		@v_NumBobina INT;
 
-	-- Recupera la referencia de la línea de trabajo
+	-- Recupera la referencia de la lï¿½nea de trabajo
 	SELECT 
 		@v_IdBobina = I.IdBobina,
 		@v_RefTrabajo = TRIM(I.RefTrabajo),

@@ -1,5 +1,4 @@
 Sub Initialize()
-
     ' Etiqueta superior
     GForm.Caption = "Líneas de Corte"
 
@@ -20,17 +19,13 @@ Sub Initialize()
         .AgregaColumna "Fecha", 1500, "Fecha", False, "", False, "dd/mm/yyyy"
         .AgregaColumna "Palets", 1500, "Palets", False, "", False, "#,##0.00", True
         .AgregaColumna "ResmasPorPalet", 1500, "Resmas/Palet", False, "", False, "#,##0.00", True
-        .AgregaColumna "PaletsEnviados", 1500, "Palets enviados", False, "", False, "#,##0.00", True
-        .AgregaColumna "PaletsPendientes", 1500, "Palets pendientes", False, "", False, "#,##0.00", True
+        .AgregaColumna "PaletsPendientes", 1500, "Palets pendientes", True, "", False, "#,##0.00", True
+        .AgregaColumna "PaletsEnviados", 1500, "Palets enviados", True, "", False, "#,##0.00", True
         .FROM = "PERS_Trabajos_Lineas_Corte"
         .Move 210, 200, 9500, 4000 
         .Refresca = True
         .Visible = True
     End With
-
-End Sub ' Initialize
-
-Sub Show()
 
     If GForm.Tag <> "" Then
         Dim idTrabajo, idLinea
@@ -47,7 +42,4 @@ Sub Show()
             .Campo("IdLineaCorte").Default = "SELECT ISNULL(MAX(IdLineaCorte), 0) + 1 FROM PERS_Trabajos_Lineas_Corte WHERE IdTrabajo = " & CInt(idTrabajo) & " AND IdLinea = " & CInt(idLinea)
         End With
     End If
-    
-    GForm.Controls("GrdLineasCorte").Refrescar
-
-End Sub ' Show
+End Sub ' Initialize
