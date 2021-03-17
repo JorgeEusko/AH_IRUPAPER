@@ -1,6 +1,4 @@
 Sub Initialize()
-
-    GForm.Botonera.ActivarScripts = True
     
     ' Etiqueta superior
     GForm.Caption = "Trabajo"
@@ -245,7 +243,6 @@ Sub Initialize()
   
     Set GrdTrabajoLineas = gForm.Controls.Add("AhoraOCX.cntGridUsuario", "GrdTrabajoLineas", GForm.Controls("PnlMain"))
     With GrdTrabajoLineas
-        .ActivarScripts = True
         .Visible = True
         .AplicaEstilo
         .Agregar = True
@@ -266,11 +263,16 @@ Sub Initialize()
         .Campo("IdLinea").Default = "SELECT ISNULL(MAX(IdLinea), 0) + 1 FROM PERS_Trabajos_Lineas"
         .Campo("IdEstado").Default = "SELECT 1"
         .FROM = "PERS_Trabajos_Lineas"
+        .MenuItemAdd "Ver", "botGridVer", 1
+        .MenuItemAdd "Bobinas", "botVerBobinas", 0, "botGridVer"
+        .MenuItemAdd "Líneas de corte", "botVerLineasCorte", 0, "botGridVer"
+        .MenuItemAdd "Costes de palet", "botVerCostesEnvio", 0, "botGridVer"
         .WHERE = "WHERE 1 = 0"
         .Refresca = True
         .Move 210, 2545, 15000, 3000 
+        .ActivarScripts = True
     End With
-    
+
     Set txtPesoResma = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtPesoResma", GForm.Controls("PnlMain"))
     With txtPesoResma 
         .AplicaEstilo  
@@ -401,6 +403,19 @@ Sub Initialize()
         .Visible = True 
     End With ' txtKilosCortados
 
+    Set txtPrecioTrabajo = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtPrecioTrabajo", GForm.Controls("PnlMain"))
+    With txtPrecioTrabajo 
+        .AplicaEstilo  
+        .CaptionControl = "Precio Tra." 
+        .CaptionVisible = True      
+        .CaptionWidth = 1000  
+        .Enabled = False 
+        .Formato = "Con 2 decimales" 
+        .Move 6510, 6325, 2000, 300
+        .TipoDato =  "Numeric"
+        .Visible = True 
+    End With ' txtPrecioTrabajo
+
 End Sub ' Initialize
 
 Sub CargaObjeto()
@@ -463,7 +478,11 @@ Sub Menu_AfterExecute(aMenu, aMenuItem)
 
     If aMenuItem.Name = "mnuTiposTrabajo" Then
         GetMenuMantenimiento "Estados de trabajo","PERS_Trabajos_Estados", "IdEstado", "Descrip"     
-    ElseIf aMenuItem.Name = "botVerBobinas" Then
+    End If
+End Sub ' Menu_AfterExecute
+
+Sub Grid_MenuAfterExecute(aGrid,aMenuItem)
+    If aMenuItem.Name = "botVerBobinas" Then
         idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
         idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
 
@@ -524,7 +543,7 @@ Sub Menu_AfterExecute(aMenu, aMenuItem)
             GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
         End If
     End If
-End Sub ' Menu_AfterExecute
+End Sub
 
 Sub Grid_RowColChange(aGrid, LastRow, LastCol)
     If aGrid.Name = "GrdTrabajoLineas" Then
@@ -538,31 +557,40 @@ Sub Grid_RowColChange(aGrid, LastRow, LastCol)
             
             Set lResult = gcn.OpenResultSet(lSQL, 2, 3)
 
-            GForm.Controls("txtPesoResma").Text = lResult("PesoResma")
-            GForm.Controls("txtKilosTeoricos").Text = lResult("KilosTeoricos")
-            GForm.Controls("txtKilosCortados").Text = lResult("KilosCortados")
-            GForm.Controls("txtMerma").Text = lResult("Merma")
-            GForm.Controls("txtPorcentajeMerma").Text = lResult("PorcentajeMerma")
-            GForm.Controls("txtBobinasUsadas").Text = lResult("Bobinas_Utilizadas")
-            GForm.Controls("txtTotalPalets").Text = lResult("Total_Palets")
-            GForm.Controls("txtTotalResmas").Text = lResult("Total_Resmas")
-            GForm.Controls("txtTotalPaletsEnviados").Text = lResult("Total_PaletsEnviados")
-            GForm.Controls("txtTotalPaletsPendientes").Text = lResult("Total_PaletsPendientes")
+            If lResult.Eof = False Then
+                GForm.Controls("txtPesoResma").Text = lResult("PesoResma")
+                GForm.Controls("txtKilosTeoricos").Text = lResult("KilosTeoricos")
+                GForm.Controls("txtKilosCortados").Text = lResult("KilosCortados")
+                GForm.Controls("txtMerma").Text = lResult("Merma")
+                GForm.Controls("txtPorcentajeMerma").Text = lResult("PorcentajeMerma")
+                GForm.Controls("txtBobinasUsadas").Text = lResult("Bobinas_Utilizadas")
+                GForm.Controls("txtTotalPalets").Text = lResult("Total_Palets")
+                GForm.Controls("txtTotalResmas").Text = lResult("Total_Resmas")
+                GForm.Controls("txtTotalPaletsEnviados").Text = lResult("Total_PaletsEnviados")
+                GForm.Controls("txtTotalPaletsPendientes").Text = lResult("Total_PaletsPendientes")
+                GForm.Controls("txtPrecioTrabajo").Text = lResult("PrecioTrabajo")
+            Else
+                VaciarCamposResumen()
+            End If
         Else
-            GForm.Controls("txtPesoResma").Text = ""
-            GForm.Controls("txtKilosTeoricos").Text = ""
-            GForm.Controls("txtKilosCortados").Text = ""
-            GForm.Controls("txtMerma").Text =""
-            GForm.Controls("txtPorcentajeMerma").Text = ""
-            GForm.Controls("txtBobinasUsadas").Text = ""
-            GForm.Controls("txtTotalPalets").Text = ""
-            GForm.Controls("txtTotalResmas").Text = ""
-            GForm.Controls("txtTotalPaletsEnviados").Text = ""
-            GForm.Controls("txtTotalPaletsPendientes").Text = ""
+            VaciarCamposResumen()
         End If
 
     End If
 End Sub ' Grid_RowColChange
+
+Sub VaciarCamposResumen()
+    GForm.Controls("txtPesoResma").Text = ""
+    GForm.Controls("txtKilosTeoricos").Text = ""
+    GForm.Controls("txtKilosCortados").Text = ""
+    GForm.Controls("txtMerma").Text =""
+    GForm.Controls("txtPorcentajeMerma").Text = ""
+    GForm.Controls("txtBobinasUsadas").Text = ""
+    GForm.Controls("txtTotalPalets").Text = ""
+    GForm.Controls("txtTotalResmas").Text = ""
+    GForm.Controls("txtTotalPaletsEnviados").Text = ""
+    GForm.Controls("txtTotalPaletsPendientes").Text = ""
+End Sub
 
 ' Jorge: Funcion para establecer la descripcion del valor de un combo
 Sub SetComboText(comboName, textName, sqlText)

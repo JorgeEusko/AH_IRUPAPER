@@ -6,6 +6,17 @@ Sub Initialize
     ' Tamaño del formulario
     GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 5000, GForm.Height - 2300
 
+    With GForm.Botonera
+        .ActivarScripts = True
+        .BotonesMantenimiento = 4
+        .Boton("botGuardar").Visible = False
+        .Boton("botNuevo").Visible = False
+        .Boton("botEliminar").Visible = False
+        .Boton("botImprimir").Visible = False
+        .BotonAdd "Asignar envios", "btnAsignarEnvios", , 0, True, 123
+        .SeguridadObjeto = 0
+    End With ' Botonera
+
     Set PnlObservaciones1 = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlObservaciones1", GForm.Controls("PnlMain"))
     With PnlObservaciones1 
         .Estilo = 2
@@ -33,7 +44,7 @@ Sub Initialize
         .CaptionControl = "Código" 
         .CaptionVisible = True      
         .CaptionWidth = 1150 
-        .Enabled = False 
+        .Enabled = True 
         .Formato = "Sin decimales" 
         .ObjOrigen = "EObjeto"
         .ObjPOrigen = "IdEnvio"
@@ -238,13 +249,11 @@ Sub Initialize
         .AgregaColumna "IdPedidoCliente", 1400, "Nº Pedido"
         .AgregaColumna "IdPedidoClienteFinal", 1400, "Nº Pedido Envío"
         .AgregaColumna "Palets", 1200, "Palets"
-        .AgregaColumna "ResmasPorPalet", 1200, "Resmas/Palet"
-        '.AgregaColumna "Resmas", 1200, "Resmas"
+        .AgregaColumna "Resmas", 1200, "Resmas"
         '.AgregaColumna "Total", 1200, "Total"
         .AgregaColumna "PesoResma", 1200, "Peso Resma"
         '.AgregaColumna "PesoTotal", 1200, "Peso total"
         .FROM = "PERS_Envios_Lineas"
-        .WHERE = "WHERE 1 = 0"
         .Refresca = True
         .Move 210, 2100, 12000, 3000 
     End With
@@ -266,6 +275,26 @@ Sub Combo_AfterUpdate(aCombo)
         SetComboTextString "cboIdDirEnvio", "txtDirEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
     End If
 End Sub ' Combo_AfterUpdate
+
+Sub Botonera_AfterExecute(aBotonera, aBoton)
+    If aBoton.Name = "btnAsignarEnvios" Then
+        Dim idCliente, idDirEnvio, idEnvio
+
+        idCliente = GForm.Controls("cboIdCliente")
+        idDirEnvio = GForm.Controls("cboIdDirEnvio")
+        idEnvio = GForm.Controls("txtIdEnvio")
+
+        If idCliente <> "" And idDirEnvio <> "" Then
+            Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
+            lFrmGen.Tag = CStr(idCliente) & "," & CStr(idDirEnvio) & "," & CStr(idEnvio)
+            lFrmGen.Carga "Frm_AsignarEnvios", GForm, True
+
+            GForm.Controls("GrdEnviosLineas").Refrescar
+        Else
+            GCN.Obj.ShowMsgBox("Debe seleccionar un cliente y unadirección de envío.")
+        End If
+    End If
+End Sub ' Botonera_AfterExecute
 
 ' Jorge: Funcion para establecer la descripcion del valor de un combo
 Sub SetComboTextString(comboName, textName, sqlText)

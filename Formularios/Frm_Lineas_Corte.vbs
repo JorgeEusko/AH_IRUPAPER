@@ -22,7 +22,6 @@ Sub Initialize()
         .AgregaColumna "ResmasPorPalet", 1500, "Resmas/Palet", False, "", False, "#,##0.00", True
         .AgregaColumna "PaletsEnviados", 1500, "Palets enviados", False, "", False, "#,##0.00", True
         .AgregaColumna "PaletsPendientes", 1500, "Palets pendientes", False, "", False, "#,##0.00", True
-        .AgregaColumna "NumEnvio", 800, "Nº Envío", False
         .FROM = "PERS_Trabajos_Lineas_Corte"
         .Move 210, 200, 9500, 4000 
         .Refresca = True

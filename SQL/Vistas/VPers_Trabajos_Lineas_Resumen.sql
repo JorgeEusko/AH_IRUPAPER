@@ -16,11 +16,15 @@ SELECT
     TLCS.Total_Resmas,
     TLCS.Total_PaletsEnviados,
     TLCS.Total_PaletsPendientes,
+    PCA.Precio AS PrecioTrabajo,
     TL.IdDoc
 FROM PERS_Trabajos_Lineas AS TL 
     JOIN VPers_Trabajos_Lineas_Bobinas_Utilizadas AS TLBU ON TL.IdTrabajo = TLBU.IdTrabajo AND TL.IdLinea = TLBU.IdLinea
     LEFT JOIN VPers_Trabajos_Lineas_KilosTeoricos AS TLK ON TL.IdTrabajo = TLK.IdTrabajo AND TL.IdLinea = TLK.IdLinea
     LEFT JOIN VPers_Trabajos_Lineas_Cortes_Sumas AS TLCS  ON TL.IdTrabajo = TLCS.IdTrabajo AND TL.IdLinea = TLCS.IdLinea
+    JOIN PERS_Trabajos AS T ON TL.IdTrabajo = T.IdTrabajo
+    JOIN Clientes_Datos_Economicos AS CD ON T.IdCliente = CD.IdCliente
+    JOIN Listas_Precios_Cli_Art AS PCA ON CD.IdLista = PCA.IdLista AND TL.IdArticulo = PCA.IdArticulo
 ) AS T1
 GO
 
