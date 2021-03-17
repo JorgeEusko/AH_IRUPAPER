@@ -4,7 +4,7 @@ Sub Initialize()
     GForm.Caption = "Trabajo"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 8000, GForm.Height
+    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 8000, GForm.Height + 500
 
     With GForm.Botonera
         .ActivarScripts = True
@@ -126,6 +126,8 @@ Sub Initialize()
         .CaptionLink = True
         .CaptionVisible = True
         .CaptionWidth = 700
+        '.Coleccion = "Clientes"
+        '.ColeccionWhere = "WHERE IdCliente=@cboIdCliente"
         .Descripcion = "Select IdCliente, Cliente, NIF From VCOMBO_CLIENTES Order By IdCliente"
         .Enabled = True
         .Formato = "Mayusculas y Minusculas"
@@ -252,12 +254,12 @@ Sub Initialize()
         .AgregaColumna "IdTrabajo", 0, "Código"
         .AgregaColumna "IdLinea", 600, "Línea"
         .AgregaColumna "RefTrabajoCliente", 1200, "Ref. Trabajo"
-        .AgregaColumna "IdArticulo", 2900, "Trabajo", False, "SELECT IdArticulo, Descrip FROM Articulos", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"        
+        .AgregaColumna "IdArticulo", 2900, "Trabajo", False, "SELECT IdArticulo, Descrip FROM Articulos WHERE IdFamilia = 1", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"        
         .AgregaColumna "IdCalidad", 2200, "Calidad", False, "SELECT IdCalidad, Descrip FROM PERS_Tipos_Calidad_Papel", False, "", False, "SELECT IdCalidad, Descrip FROM PERS_Tipos_Calidad_Papel"
         .AgregaColumna "Ancho", 1000, "Ancho (cm)", False, "", False, "#,##0.00"
         .AgregaColumna "Largo", 1000, "Largo (cm)", False, "", False, "#,##0.00"
         .AgregaColumna "Gramaje", 1350, "Gramaje (Gr/m2)", False, "", False, "#,##0.00"
-        .AgregaColumna "IdArticuloPrecio", 2000, "Art. Palet", False, "SELECT IdArticulo, Descrip FROM Articulos", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"
+        .AgregaColumna "IdArticuloPrecio", 2000, "Art. Palet", False, "SELECT IdArticulo, Descrip FROM Articulos WHERE IdFamilia = 2", False, "", False, "SELECT IdArticulo, Descrip FROM Articulos"
         .AgregaColumna "IdEstado", 1200, "Estado", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados", False, "", False, "SELECT IdEstado, Descrip FROM PERS_Trabajos_Estados"
         .AgregaColumna "Facturada", 850, "Facturado"
         .Campo("IdLinea").Default = "SELECT ISNULL(MAX(IdLinea), 0) + 1 FROM PERS_Trabajos_Lineas"
@@ -278,25 +280,29 @@ Sub Initialize()
         .AplicaEstilo  
         .CaptionControl = "Peso resma" 
         .CaptionVisible = True      
-        .CaptionWidth = 1000  
+        .CaptionWidth = 1000 
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 210, 5980, 2000, 300
+        .Move 210, 5700, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite
     End With ' txtPesoResma
 
     Set txtKilosTeoricos = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtKilosTeoricos", GForm.Controls("PnlMain"))
     With txtKilosTeoricos 
         .AplicaEstilo  
-        .CaptionControl = "Kg teoricos" 
+        .CaptionControl = "Kg teóricos" 
         .CaptionVisible = True      
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 2310, 5980, 2000, 300
+        .Move 1710, 5700, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite
     End With ' txtKilosTeoricos
 
     Set txtMerma = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtMerma", GForm.Controls("PnlMain"))
@@ -307,9 +313,11 @@ Sub Initialize()
         .CaptionWidth = 800  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 4410 + 200, 5980, 1800, 300
+        .Move 3210, 5700, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite
     End With ' txtMerma
 
     Set txtPorcentajeMerma = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtPorcentajeMerma", GForm.Controls("PnlMain"))
@@ -320,75 +328,102 @@ Sub Initialize()
         .CaptionWidth = 900  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 6510 + 100, 5980, 1900, 300
+        .Move 4710, 5700, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite
     End With ' txtPorcentajeMerma
 
     Set txtBobinasUsadas = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtBobinasUsadas", GForm.Controls("PnlMain"))
     With txtBobinasUsadas 
         .AplicaEstilo  
-        .CaptionControl = "Bobinas usadas" 
+        .CaptionControl = "Bobinas" 
         .CaptionVisible = True      
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Sin decimales" 
-        .Move 8610, 5980, 2000, 300
+        .Move 6210, 5700, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite
     End With ' txtBobinasUsadas
 
     Set txtTotalPalets = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtTotalPalets", GForm.Controls("PnlMain"))
     With txtTotalPalets 
         .AplicaEstilo  
-        .CaptionControl = "T. Palets" 
+        .CaptionControl = "Pallets" 
         .CaptionVisible = True      
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 10710, 5980, 2000, 300
+        .Move 7710, 5700, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite
     End With ' txtTotalPalets
 
     Set txtTotalResmas = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtTotalResmas", GForm.Controls("PnlMain"))
     With txtTotalResmas 
         .AplicaEstilo  
-        .CaptionControl = "T. Resmas" 
+        .CaptionControl = "Resmas" 
         .CaptionVisible = True      
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 12810, 5980, 2000, 300
+        .Move 9210, 5700, 1500, 600
         .TipoDato =  "Numeric"
-        .Visible = True 
+        .Visible = True
+        .CaptionPosition = 1
+        .backColor = vbWhite 
     End With ' txtTotalResmas
-
-    Set txtTotalPaletsEnviados = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtTotalPaletsEnviados", GForm.Controls("PnlMain"))
-    With txtTotalPaletsEnviados 
-        .AplicaEstilo  
-        .CaptionControl = "Palets enviados" 
-        .CaptionVisible = True      
-        .CaptionWidth = 1000  
-        .Enabled = False 
-        .Formato = "Con 2 decimales" 
-        .Move 210, 6325, 2000, 300
-        .TipoDato =  "Numeric"
-        .Visible = True 
-    End With ' txtTotalPaletsEnviados
 
     Set txtTotalPaletsPendientes = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtTotalPaletsPendientes", GForm.Controls("PnlMain"))
     With txtTotalPaletsPendientes 
         .AplicaEstilo  
-        .CaptionControl = "Palets pendientes" 
+        .CaptionControl = "Pallets pendientes" 
         .CaptionVisible = True      
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 2310, 6325, 2000, 300
+        .Move 10710, 5700, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite 
     End With ' txtTotalPaletsPendientes
+
+    Set txtTotalPaletsEnviados = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtTotalPaletsEnviados", GForm.Controls("PnlMain"))
+    With txtTotalPaletsEnviados 
+        .AplicaEstilo  
+        .CaptionControl = "Pallets enviados" 
+        .CaptionVisible = True      
+        .CaptionWidth = 1000  
+        .Enabled = False 
+        .Formato = "Con 2 decimales" 
+        .Move 12810, 5700, 1500, 600
+        .TipoDato =  "Numeric"
+        .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite 
+    End With ' txtTotalPaletsEnviados
+
+    Set txtPrecioTrabajo = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtPrecioTrabajo", GForm.Controls("PnlMain"))
+    With txtPrecioTrabajo 
+        .AplicaEstilo  
+        .CaptionControl = "Precio Trabajo" 
+        .CaptionVisible = True      
+        .CaptionWidth = 1000  
+        .Enabled = False 
+        .Formato = "Con 2 decimales" 
+        .Move 210, 6500, 1500, 600
+        .TipoDato =  "Numeric"
+        .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite 
+    End With ' txtPrecioTrabajo
 
     Set txtKilosCortados = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtKilosCortados", GForm.Controls("PnlMain"))
     With txtKilosCortados 
@@ -398,23 +433,12 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 4410, 6325, 2000, 300
+        .Move 1710, 6500, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
+        .CaptionPosition = 1
+        .backColor = vbWhite 
     End With ' txtKilosCortados
-
-    Set txtPrecioTrabajo = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtPrecioTrabajo", GForm.Controls("PnlMain"))
-    With txtPrecioTrabajo 
-        .AplicaEstilo  
-        .CaptionControl = "Precio Tra." 
-        .CaptionVisible = True      
-        .CaptionWidth = 1000  
-        .Enabled = False 
-        .Formato = "Con 2 decimales" 
-        .Move 6510, 6325, 2000, 300
-        .TipoDato =  "Numeric"
-        .Visible = True 
-    End With ' txtPrecioTrabajo
 
 End Sub ' Initialize
 
@@ -422,7 +446,6 @@ Sub CargaObjeto()
 
     If GForm.EObjeto.ObjGlobal.Nuevo Then  
         GForm.Controls("GrdTrabajoLineas").Enabled = False
-
         GForm.Controls("txtIdTrabajo").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdTrabajo), 0) + 1 AS NuevoCodigoTrabajo FROM Pers_Trabajos", "NuevoCodigoTrabajo")
         GForm.Controls("txtFecha").Text = CStr(Now())
         GForm.Controls("cboIdEstado").Value = 1        
@@ -545,9 +568,23 @@ Sub Grid_MenuAfterExecute(aGrid,aMenuItem)
     End If
 End Sub
 
+Sub Grid_DblClick(aGrid)
+    Dim columna, idArticulo
+    columna = aGrid.CampoActual
+
+    If columna = "IdArticulo"  Then
+        idArticulo = aGrid.GetValue("IdArticulo")
+        Set lObj = GCN.Obj.DameObjeto("Articulos", "Where IdArticulo='" & CStr(idArticulo)& "'")
+        lObj.Show, True
+    ElseIf columna = "IdArticuloPrecio" Then
+        idArticulo = aGrid.GetValue("IdArticuloPrecio")
+        Set lObj = GCN.Obj.DameObjeto("Articulos", "Where IdArticulo='" & CStr(idArticulo) & "'")
+        lObj.Show, True
+    End If
+End Sub ' Grid_DblClick
+
 Sub Grid_RowColChange(aGrid, LastRow, LastCol)
     If aGrid.Name = "GrdTrabajoLineas" Then
-
         idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
         idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
 
@@ -575,7 +612,6 @@ Sub Grid_RowColChange(aGrid, LastRow, LastCol)
         Else
             VaciarCamposResumen()
         End If
-
     End If
 End Sub ' Grid_RowColChange
 
@@ -590,7 +626,7 @@ Sub VaciarCamposResumen()
     GForm.Controls("txtTotalResmas").Text = ""
     GForm.Controls("txtTotalPaletsEnviados").Text = ""
     GForm.Controls("txtTotalPaletsPendientes").Text = ""
-End Sub
+End Sub ' VaciarCamposResumen
 
 ' Jorge: Funcion para establecer la descripcion del valor de un combo
 Sub SetComboText(comboName, textName, sqlText)
