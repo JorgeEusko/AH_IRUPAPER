@@ -51,8 +51,6 @@ Sub Initialize()
         .ObjPOrigen = "IdBobina"
         .Move 210, 240, 2000, 300 
         .Necesario = True
-        '.TabIndex = 1
-        '.TabStop = True
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtIdBobina
@@ -79,8 +77,6 @@ Sub Initialize()
         .Move 2300, 240, 1550, 300 
         .NColumnas = 2
         .Necesario = True
-        '.TabIndex = 11
-        '.TabStop = True
         .Visible = True  
     End With ' cboIdEstado
 
@@ -218,15 +214,12 @@ Sub Initialize()
         .ObjPOrigen = "NumBobina"
         .Move 210, 1965, 2000, 300 
         .Necesario = True
-        '.TabIndex = 3
-        '.TabStop = True
         .TipoDato =  "Numeric"
         .Visible = True 
     End With ' txtNumBobina 
     
     Set txtKilos = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtKilos", GForm.Controls("PnlDatos"))
     With txtKilos
-        .ActivarScripts = True
         .AplicaEstilo
         .CaptionControl = "Kilos" 
         .CaptionVisible = True      
@@ -430,7 +423,7 @@ End Sub ' Initialize
 Sub CargaObjeto()
 
     If GForm.EObjeto.ObjGlobal.Nuevo Then  
-        GForm.Controls("txtIdBobina").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdBobina), 0) + 1 AS NuevoCodigoBobina FROM Pers_Bobinas", "NuevoCodigoBobina")
+        GForm.Controls("txtIdBobina").Text = GCN.DameValorCampo("SELECT ISNULL(MAX(IdBobina), 0) + 1 AS NuevoCodigoBobina FROM Pers_Bobinas", "NuevoCodigoBobina")
         GForm.Controls("cboIdEstado") = 1 
         GForm.Controls("txtNumBobina").Text = 1
         GForm.Controls("txtFechaEntrada").Text = CStr(Now())
@@ -440,33 +433,33 @@ Sub CargaObjeto()
 End Sub ' CargaObjeto()
 
 Sub Botonera_BeforeExecute(aBotonera, aBoton, aCancel)
-  If aBoton.Name = "botGuardar" Then
-    Dim kilos, metros, ancho, gramaje
-    
-    ancho = CDbl(gForm.Controls("txtAncho").Text)
-    gramaje = CDbl(gForm.Controls("txtGramaje").Text)
-    
-    If gForm.Controls("txtKilos").Text > 0  Then
-      kilos = CDbl(gForm.Controls("txtKilos").Text)
-      GForm.Controls("txtMetros").Text = CStr((kilos / (ancho * gramaje)) * 100000)
-      
-    ElseIf gForm.Controls("txtMetros").Text > 0 Then
-      metros = CDbl(gForm.Controls("txtMetros").Text)
-      GForm.Controls("txtKilos").Text = CStr((ancho * gramaje * (metros / 10000)))
-    End If
- 
-  End If  
+    If aBoton.Name = "botGuardar" Then
+        Dim kilos, metros, ancho, gramaje
+
+        ancho = CDbl(gForm.Controls("txtAncho").Text)
+        gramaje = CDbl(gForm.Controls("txtGramaje").Text)
+        
+        If gForm.Controls("txtKilos").Text > 0  Then
+            kilos = CDbl(gForm.Controls("txtKilos").Text)
+            GForm.Controls("txtMetros").Text = CStr((kilos / (ancho * gramaje)) * 100000)
+        ElseIf gForm.Controls("txtMetros").Text > 0 Then
+            metros = CDbl(gForm.Controls("txtMetros").Text)
+            GForm.Controls("txtKilos").Text = CStr((ancho * gramaje * (metros / 10000)))
+        End If
+    End If  
 End Sub
 
 Sub Botonera_AfterExecute(aBotonera, aBoton)
     If aBoton.Name = "botNuevo" Then
         GForm.Controls("txtIdBobina").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdBobina), 0) + 1 AS NuevoCodigoBobina FROM Pers_Bobinas", "NuevoCodigoBobina")
         GForm.Controls("cboIdEstado") = 1
+        GForm.Controls("txtNumBobina").Text = 1
+        GForm.Controls("txtFechaEntrada").Text = CStr(Now())
         SetAllComboText()
     ElseIf aBoton.Name = "btnVerTrabajo" Then
-    
         If GForm.Controls("txtIdBobina").Text <> "" Then
             Dim idTrabajo 
+            
             idTrabajo = GCN.DameValorCampo("SELECT IdTrabajo FROM PERS_Trabajos_Lineas_Bobinas WHERE IdBobina = " & GForm.Controls("txtIdBobina").Text)
 
             If Len(CStr(idTrabajo)) > 0 Then

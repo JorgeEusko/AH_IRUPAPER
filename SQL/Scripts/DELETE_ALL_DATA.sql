@@ -1,0 +1,7 @@
+DELETE FROM PERS_Envios_Lineas
+DELETE FROM PERS_Envios
+DELETE FROM PERS_Trabajos_Lineas_Bobinas
+DELETE FROM PERS_Trabajos_Lineas_Corte
+DELETE FROM PERS_Trabajos_Lineas
+DELETE FROM PERS_Trabajos
+DELETE FROM PERS_Bobinas
