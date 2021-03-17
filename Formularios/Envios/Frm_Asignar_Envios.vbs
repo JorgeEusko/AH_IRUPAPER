@@ -73,6 +73,9 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
 
         If GCN.EjecutaStoreCol("PPERS_Asignar_Envios_Lineas", params) Then
             GCN.Obj.ShowMsgBox("Envios asignados correctamente.")
+            GForm.Controls("GrdAsignarEnvios").Refrescar
+        Else
+            GCN.Obj.ShowMsgBox("Ha ocurrido algún al asignar los envios.")
         End If
     End If
 End Sub ' Botonera_AfterExecute

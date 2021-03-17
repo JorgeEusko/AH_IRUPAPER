@@ -4,17 +4,11 @@ Sub Initialize
     GForm.Caption = "Envío"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 5000, GForm.Height - 2300
+    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 5000, GForm.Height - 2000
 
     With GForm.Botonera
         .ActivarScripts = True
-        .BotonesMantenimiento = 4
-        .Boton("botGuardar").Visible = False
-        .Boton("botNuevo").Visible = False
-        .Boton("botEliminar").Visible = False
-        .Boton("botImprimir").Visible = False
         .BotonAdd "Asignar envios", "btnAsignarEnvios", , 0, True, 123
-        .SeguridadObjeto = 0
     End With ' Botonera
 
     Set PnlObservaciones1 = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlObservaciones1", GForm.Controls("PnlMain"))
@@ -44,7 +38,7 @@ Sub Initialize
         .CaptionControl = "Código" 
         .CaptionVisible = True      
         .CaptionWidth = 1150 
-        .Enabled = True 
+        .Enabled = False 
         .Formato = "Sin decimales" 
         .ObjOrigen = "EObjeto"
         .ObjPOrigen = "IdEnvio"
@@ -239,10 +233,10 @@ Sub Initialize
         .ActivarScripts = True
         .Visible = True
         .AplicaEstilo
-        .Agregar = True
-        .Editar = True
-        .Enabled = True
-        .Eliminar = True
+        .Agregar = False
+        .Editar = False
+        .Enabled = False
+        .Eliminar = False
         .AgregaColumna "IdEnvio", 0, "Código"
         .AgregaColumna "IdEnvioLinea", 600, "Línea"
         .AgregaColumna "RefTrabajo", 1400, "Ref."
@@ -261,6 +255,15 @@ Sub Initialize
 End Sub ' Initialize
 
 Sub CargaObjeto()
+
+    If GForm.EObjeto.ObjGlobal.Nuevo Then
+        GForm.Controls("GrdEnviosLineas").Enabled = False
+        GForm.Controls("txtIdEnvio").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdEnvio), 0) + 1 AS NuevoCodigoEnvio FROM Pers_Envios", "NuevoCodigoEnvio")
+        GForm.Controls("txtFecha").Text = CStr(Now())  
+    Else
+        GForm.Controls("GrdEnviosLineas").Enabled = True
+    End If
+
     SetComboTextString "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = '"
     SetComboTextString "cboIdTransportista", "txtTransportista", "SELECT Proveedor FROM Prov_Datos WHERE IdProveedor = '"
     SetComboTextString "cboIdDirEnvio", "txtDirEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
@@ -293,6 +296,8 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
         Else
             GCN.Obj.ShowMsgBox("Debe seleccionar un cliente y unadirección de envío.")
         End If
+    ElseIf aBoton.Name = "botGuardar" Then
+        GForm.Controls("GrdEnviosLineas").Enabled = True
     End If
 End Sub ' Botonera_AfterExecute
 
