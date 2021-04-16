@@ -12,7 +12,7 @@ Sub Initialize()
     With GForm.Botonera
         .ActivarScripts = True
         .BotonesMantenimiento = 4
-        .BotonAdd "Enlazar", "btnEnlazar", "", 0, False, 123
+        .BotonAdd "Enlazar", "btnEnlazar", "", 1, False, 123
         .Boton("botGuardar").Visible = False
         .Boton("botNuevo").Visible = False
         .Boton("botEliminar").Visible = False
