@@ -243,11 +243,13 @@ Sub Initialize
         .AgregaColumna "IdPedidoCliente", 1400, "Nº Pedido"
         .AgregaColumna "IdPedidoClienteFinal", 1400, "Nº Pedido Envío"
         .AgregaColumna "Palets", 1200, "Palets"
+        .AgregaColumna "ResmasPorPalet", 1200, "Resmas/Palets", True
         .AgregaColumna "Resmas", 1200, "Resmas"
         '.AgregaColumna "Total", 1200, "Total"
         .AgregaColumna "PesoResma", 1200, "Peso Resma"
         '.AgregaColumna "PesoTotal", 1200, "Peso total"
         .FROM = "PERS_Envios_Lineas"
+        .WHERE =  "WHERE 1 = 0"
         .Refresca = True
         .Move 210, 2100, 12000, 3000 
     End With
@@ -255,18 +257,7 @@ Sub Initialize
 End Sub ' Initialize
 
 Sub CargaObjeto()
-
-    If GForm.EObjeto.ObjGlobal.Nuevo Then
-        GForm.Controls("GrdEnviosLineas").Enabled = False
-        GForm.Controls("txtIdEnvio").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdEnvio), 0) + 1 AS NuevoCodigoEnvio FROM Pers_Envios", "NuevoCodigoEnvio")
-        GForm.Controls("txtFecha").Text = CStr(Now())  
-    Else
-        GForm.Controls("GrdEnviosLineas").Enabled = True
-    End If
-
-    SetComboTextString "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = '"
-    SetComboTextString "cboIdTransportista", "txtTransportista", "SELECT Proveedor FROM Prov_Datos WHERE IdProveedor = '"
-    SetComboTextString "cboIdDirEnvio", "txtDirEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
+    CargarEnvio()
 End Sub ' CargaObjeto
 
 Sub Combo_AfterUpdate(aCombo)     
@@ -298,8 +289,26 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
         End If
     ElseIf aBoton.Name = "botGuardar" Then
         GForm.Controls("GrdEnviosLineas").Enabled = True
+    ElseIf aBoton.Name = "botNuevo" Then
+        CargarEnvio()
     End If
 End Sub ' Botonera_AfterExecute
+
+Sub CargarEnvio()
+    If GForm.EObjeto.ObjGlobal.Nuevo Then
+        GForm.Controls("GrdEnviosLineas").Enabled = False
+        GForm.Controls("txtIdEnvio").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdEnvio), 0) + 1 AS NuevoCodigoEnvio FROM Pers_Envios", "NuevoCodigoEnvio")
+        GForm.Controls("txtFecha").Text = CStr(Now())  
+    Else
+        GForm.Controls("GrdEnviosLineas").Enabled = True
+        GForm.Controls("GrdEnviosLineas").WHERE = "WHERE IdEnvio = " & GForm.Controls("txtIdEnvio").Text
+        GForm.Controls("GrdEnviosLineas").Refrescar
+    End If
+
+    SetComboTextString "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = '"
+    SetComboTextString "cboIdTransportista", "txtTransportista", "SELECT Proveedor FROM Prov_Datos WHERE IdProveedor = '"
+    SetComboTextString "cboIdDirEnvio", "txtDirEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
+End Sub ' CargarEnvio
 
 ' Jorge: Funcion para establecer la descripcion del valor de un combo
 Sub SetComboTextString(comboName, textName, sqlText)

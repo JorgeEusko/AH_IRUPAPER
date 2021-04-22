@@ -4,7 +4,7 @@ Sub Initialize()
     GForm.Caption = "Trabajo"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 8000, GForm.Height + 500
+    GForm.Move GForm.Left - 2500, GForm.Top + -500, GForm.Width + 8000, GForm.Height + 1200
 
     With GForm.Botonera
         .ActivarScripts = True
@@ -267,12 +267,34 @@ Sub Initialize()
         .FROM = "PERS_Trabajos_Lineas"
         .MenuItemAdd "Ver", "botGridVer", 1
         .MenuItemAdd "Bobinas", "botVerBobinas", 0, "botGridVer"
-        .MenuItemAdd "Líneas de corte", "botVerLineasCorte", 0, "botGridVer"
         .MenuItemAdd "Costes de palet", "botVerCostesEnvio", 0, "botGridVer"
         .WHERE = "WHERE 1 = 0"
         .Refresca = True
-        .Move 210, 2545, 15000, 3000 
+        .Move 210, 2545, 15000, 1850 
         .ActivarScripts = True
+    End With
+
+    Set GrdLineasCorte = gForm.Controls.Add("AhoraOCX.cntGridUsuario", "GrdLineasCorte", GForm.Controls("PnlMain"))
+    With GrdLineasCorte
+        .ActivarScripts = True
+        .AplicaEstilo
+        .Agregar = True
+        .Editar = True
+        .Enabled = True
+        .Eliminar = True
+        .AgregaColumna "IdTrabajo", 0, "IdTrabajo", False
+        .AgregaColumna "IdLinea", 0, "Línea", False
+        .AgregaColumna "IdLineaCorte", 0, "Código", False
+        .AgregaColumna "Fecha", 1500, "Fecha", False, "", False, "dd/mm/yyyy"
+        .AgregaColumna "Palets", 1500, "Palets", False, "", False, "#,##0.00"
+        .AgregaColumna "ResmasPorPalet", 1500, "Resmas/Palet", False, "", False, "#,##0.00"
+        .AgregaColumna "PaletsPendientes", 1500, "Palets pendientes", True, "", False, "#,##0.00"
+        .AgregaColumna "PaletsEnviados", 1500, "Palets enviados", True, "", False, "#,##0.00"
+        .FROM = "PERS_Trabajos_Lineas_Corte"
+        .WHERE = "WHERE 1 = 0"
+        .Move 210, 4600, 15000, 1850 
+        .Refresca = True
+        .Visible = True
     End With
 
     Set txtPesoResma = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtPesoResma", GForm.Controls("PnlMain"))
@@ -283,7 +305,7 @@ Sub Initialize()
         .CaptionWidth = 1000 
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 210, 5700, 1500, 600
+        .Move 210, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -298,7 +320,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 1710, 5700, 1500, 600
+        .Move 1710, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -313,7 +335,7 @@ Sub Initialize()
         .CaptionWidth = 800  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 3210, 5700, 1500, 600
+        .Move 3210, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -328,7 +350,7 @@ Sub Initialize()
         .CaptionWidth = 900  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 4710, 5700, 1500, 600
+        .Move 4710, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -343,7 +365,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Sin decimales" 
-        .Move 6210, 5700, 1500, 600
+        .Move 6210, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -358,7 +380,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 7710, 5700, 1500, 600
+        .Move 7710, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -373,7 +395,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 9210, 5700, 1500, 600
+        .Move 9210, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True
         .CaptionPosition = 1
@@ -388,7 +410,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 10710, 5700, 1500, 600
+        .Move 10710, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -403,7 +425,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 12810, 5700, 1500, 600
+        .Move 12810, 6600, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -418,7 +440,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 210, 6500, 1500, 600
+        .Move 210, 7200, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -433,7 +455,7 @@ Sub Initialize()
         .CaptionWidth = 1000  
         .Enabled = False 
         .Formato = "Con 2 decimales" 
-        .Move 1710, 6500, 1500, 600
+        .Move 1710, 7200, 1500, 600
         .TipoDato =  "Numeric"
         .Visible = True 
         .CaptionPosition = 1
@@ -445,30 +467,39 @@ End Sub ' Initialize
 Sub CargaObjeto()
 
     If GForm.EObjeto.ObjGlobal.Nuevo Then  
-        GForm.Controls("GrdTrabajoLineas").Enabled = False
+        ' Inicializacion del estado de un trabajo nuevo
         GForm.Controls("txtIdTrabajo").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdTrabajo), 0) + 1 AS NuevoCodigoTrabajo FROM Pers_Trabajos", "NuevoCodigoTrabajo")
         GForm.Controls("txtFecha").Text = CStr(Now())
-        GForm.Controls("cboIdEstado").Value = 1        
+        GForm.Controls("cboIdEstado").Value = 1   
+        GForm.Controls("GrdTrabajoLineas").Enabled = False     
+        GForm.Controls("GrdLineasCorte").Enabled = False
     Else
+        ' Filtro e inicializacion del grid de las lineas de trabajo
         GForm.Controls("GrdTrabajoLineas").Enabled = True
         GForm.Controls("GrdTrabajoLineas").WHERE = "WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").Campo("IdTrabajo").Default = "SELECT IdTrabajo FROM Pers_Trabajos WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").Refrescar
+        
+        ' Filtro e inicializacion del grid de las lineas de corte 
+        GForm.Controls("GrdLineasCorte").Where = "WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text) & " AND IdLinea = " & CInt(GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea"))
+        GForm.Controls("GrdLineasCorte").Campo("IdTrabajo").Default = "SELECT IdTrabajo FROM Pers_Trabajos WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
+        GForm.Controls("GrdLineasCorte").Campo("Fecha").Default = "SELECT GETDATE()"
+        GForm.Controls("GrdLineasCorte").Refrescar
     End If
 
-    SetComboTextString "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = '"
-    SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = "
-    SetComboTextString "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
-
+    ' Establecer el texto en los combos
+    SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = ", True
+    SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = ", False
+    SetComboText "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = ", True
 End Sub ' CargaObjeto
 
 Sub Combo_AfterUpdate(aCombo)     
     If aCombo.Name = "cboIdCliente" Then 
-        SetComboTextString "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = '"
+        SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = ", True
     ElseIf  aCombo.Name = "cboIdEstado" Then
-        SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = "
+        SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = ", False
     ElseIf  aCombo.Name = "cboIdDireccionEnvio" Then
-        SetComboTextString "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = '"
+        SetComboText "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = ", True
     End If
 End Sub ' Combo_AfterUpdate
 
@@ -476,23 +507,40 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
     Dim idTrabajo, idLinea
 
     If aBoton.Name = "botGuardar" Then
+        ' Al guardar, inicializa el grid de lineas de trabajo para poder meter lineas
         GForm.Controls("GrdTrabajoLineas").Enabled = True
         GForm.Controls("GrdTrabajoLineas").Campo("IdTrabajo").Default = "SELECT IdTrabajo FROM Pers_Trabajos WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").Campo("IdLinea").Default = "SELECT ISNULL(MAX(IdLinea), 0) + 1 FROM PERS_Trabajos_Lineas  WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
         GForm.Controls("GrdTrabajoLineas").WHERE = "WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
+    
+        ' Al guardar, inicializa el grid de lineas de corte para poder meter lineas
+        GForm.Controls("GrdLineasCorte").Enabled = True
+        GForm.Controls("GrdLineasCorte").Campo("IdTrabajo").Default = "SELECT IdTrabajo FROM Pers_Trabajos WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text)
+        GForm.Controls("GrdLineasCorte").Campo("Fecha").Default = "SELECT GETDATE()"
+
     ElseIf aBoton.Name = "botImprimirEtiquetas" Then
         idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
         idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
 
         If idTrabajo <> "" And idLinea <> "" Then
-
             Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
             lFrmGen.Tag = CStr(idTrabajo) & "," & CStr(idLinea)
             lFrmGen.Carga "Frm_Etiquetas", GForm, True
-
         Else
             GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
         End If
+    ElseIf aBoton.Name = "botNuevo" Then
+        ' Establecer el texto en los combos
+        SetComboText "cboIdCliente", "txtCliente", "SELECT Cliente FROM Clientes_Datos WHERE IdCliente = ", True
+        SetComboText "cboIdEstado", "txtEstado", "SELECT Descrip FROM PERS_Trabajos_Estados WHERE IdEstado = ", False
+        SetComboText "cboIdDireccionEnvio", "txtDireccionEnvio", "SELECT Direccion FROM VPers_Contactos WHERE CodigoAlt = ", True
+        GForm.Controls("GrdTrabajoLineas").Where = "WHERE 1 = 0"
+        GForm.Controls("GrdLineasCorte").Where = "WHERE 1 = 0"
+        GForm.Controls("GrdTrabajoLineas").Enabled = False
+        GForm.Controls("GrdLineasCorte").Enabled = False
+        GForm.Controls("GrdTrabajoLineas").Refrescar
+        GForm.Controls("GrdLineasCorte").Refrescar
+        VaciarCamposResumen()
     End If
 End Sub ' Botonera_AfterExecute
 
@@ -500,7 +548,27 @@ Sub Menu_AfterExecute(aMenu, aMenuItem)
     Dim idTrabajo, idLinea
 
     If aMenuItem.Name = "mnuTiposTrabajo" Then
-        GetMenuMantenimiento "Estados de trabajo","PERS_Trabajos_Estados", "IdEstado", "Descrip"     
+        Set lFrm = gcn.AhoraProceso("NewfrmMantenimiento", False, GCN)
+        lFrm.Form.NombreForm = "Frm_Estados_de_trabajo"
+
+        With lFrm.Grid("Mantenimiento")
+            If Not .Preparada Then
+                .Agregar = True
+                .Editar = True
+                .Eliminar = True
+                .CargaObjetos = False
+                .EditarPorObjeto = False
+                .AgregaColumna "IdEstado", 800, "Código"
+                .AgregaColumna "Descrip", 2600, "Descripción"
+                .ColumnaEscalada = "Descrip"
+                .From = "PERS_Trabajos_Estados"
+            End If
+            .Refresca = True  
+        End With
+        
+        lFrm.form.Width = 10000
+        lFrm.Form.Caption = "Estados de trabajo"
+        lFrm.Carga, False, 4 
     End If
 End Sub ' Menu_AfterExecute
 
@@ -536,32 +604,14 @@ Sub Grid_MenuAfterExecute(aGrid,aMenuItem)
         Else
             GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
         End If
-
-    ElseIf aMenuItem.Name = "botVerLineasCorte" Then
-
-        idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
-        idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
-
-        If idTrabajo <> "" And idLinea <> "" Then
-
-            Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
-            lFrmGen.Tag = CStr(idTrabajo) & "," & CStr(idLinea)
-            lFrmGen.Carga "Frm_LineasCorte", GForm, True
-
-        Else
-            GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
-        End If
     ElseIf aMenuItem.Name = "botVerCostesEnvio" Then
-
         idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
         idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
 
         If idTrabajo <> "" And idLinea <> "" Then
-
             Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
             lFrmGen.Tag = CStr(idTrabajo) & "," & CStr(idLinea)
             lFrmGen.Carga "Frm_CostesEnvio", GForm, True
-
         Else
             GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
         End If
@@ -585,35 +635,20 @@ End Sub ' Grid_DblClick
 
 Sub Grid_RowColChange(aGrid, LastRow, LastCol)
     If aGrid.Name = "GrdTrabajoLineas" Then
-        idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
-        idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
+        GForm.Controls("GrdLineasCorte").Where = "WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text) & " AND IdLinea = " & CInt(aGrid.GetValue("IdLinea")) 
+        GForm.Controls("GrdLineasCorte").Campo("IdLinea").Default = "SELECT IdLinea FROM PERS_Trabajos_Lineas WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text) & " AND IdLinea = " & CInt(aGrid.GetValue("IdLinea"))
+        GForm.Controls("GrdLineasCorte").Campo("IdLineaCorte").Default = "SELECT ISNULL(MAX(IdLineaCorte), 0) + 1 FROM PERS_Trabajos_Lineas_Corte WHERE IdTrabajo = " & CInt(GForm.Controls("txtIdTrabajo").Text) & " AND IdLinea = " & CInt(aGrid.GetValue("IdLinea"))
+        GForm.Controls("GrdLineasCorte").Refrescar
 
-        If idTrabajo <> "" And idLinea <> "" Then
-            Dim lSQL
-            lSQL = "SELECT TOP 1 * FROM VPers_Trabajos_Lineas_Resumen WHERE IdTrabajo = " & idTrabajo & " AND IdLinea = " & idLinea
-            
-            Set lResult = gcn.OpenResultSet(lSQL, 2, 3)
-
-            If lResult.Eof = False Then
-                GForm.Controls("txtPesoResma").Text = lResult("PesoResma")
-                GForm.Controls("txtKilosTeoricos").Text = lResult("KilosTeoricos")
-                GForm.Controls("txtKilosCortados").Text = lResult("KilosCortados")
-                GForm.Controls("txtMerma").Text = lResult("Merma")
-                GForm.Controls("txtPorcentajeMerma").Text = lResult("PorcentajeMerma")
-                GForm.Controls("txtBobinasUsadas").Text = lResult("Bobinas_Utilizadas")
-                GForm.Controls("txtTotalPalets").Text = lResult("Total_Palets")
-                GForm.Controls("txtTotalResmas").Text = lResult("Total_Resmas")
-                GForm.Controls("txtTotalPaletsEnviados").Text = lResult("Total_PaletsEnviados")
-                GForm.Controls("txtTotalPaletsPendientes").Text = lResult("Total_PaletsPendientes")
-                GForm.Controls("txtPrecioTrabajo").Text = lResult("PrecioTrabajo")
-            Else
-                VaciarCamposResumen()
-            End If
-        Else
-            VaciarCamposResumen()
-        End If
+        MostrarDatosResumen()
     End If
 End Sub ' Grid_RowColChange
+
+Sub Grid_AfterUpdate(aGrid)
+    If aGrid.Name = "GrdLineasCorte" Then
+        MostrarDatosResumen()
+    End If
+End Sub ' Grid_AfterUpdate
 
 Sub VaciarCamposResumen()
     GForm.Controls("txtPesoResma").Text = ""
@@ -626,57 +661,50 @@ Sub VaciarCamposResumen()
     GForm.Controls("txtTotalResmas").Text = ""
     GForm.Controls("txtTotalPaletsEnviados").Text = ""
     GForm.Controls("txtTotalPaletsPendientes").Text = ""
+    GForm.Controls("txtPrecioTrabajo").Text = ""
 End Sub ' VaciarCamposResumen
 
 ' Jorge: Funcion para establecer la descripcion del valor de un combo
-Sub SetComboText(comboName, textName, sqlText)
-  
+Sub SetComboText(comboName, textName, sqlText, isStringValue)
   If Len(GForm.Controls(comboName).Value) > 0 Then
     Dim comboValue
     comboValue = GForm.Controls(comboName).Value
-    GForm.Controls(textName).Text = GCN.DameValorcampo(sqlText & comboValue)
+    
+    If isStringValue Then
+        GForm.Controls(textName).Text = GCN.DameValorcampo(sqlText & "'" & comboValue & "'")
+    Else
+        GForm.Controls(textName).Text = GCN.DameValorcampo(sqlText & comboValue)
+    End If
   Else
     GForm.Controls(textName).Text = ""
   End If
-
 End Sub
 
-' Jorge: Funcion para establecer la descripcion del valor de un combo
-Sub SetComboTextString(comboName, textName, sqlText)
-  
-  If Len(GForm.Controls(comboName).Value) > 0 Then
-    Dim comboValue
-    comboValue = GForm.Controls(comboName).Value
-    GForm.Controls(textName).Text = GCN.DameValorcampo(sqlText & comboValue & "'")
-  Else
-    GForm.Controls(textName).Text = ""
-  End If
+Sub MostrarDatosResumen() 
+    idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
+    idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
 
-End Sub
+    If idTrabajo <> "" And idLinea <> "" Then
+        Dim lSQL
+        lSQL = "SELECT TOP 1 * FROM VPers_Trabajos_Lineas_Resumen WHERE IdTrabajo = " & idTrabajo & " AND IdLinea = " & idLinea 
+        Set lResult = gcn.OpenResultSet(lSQL, 2, 3)
 
-' Jorge: Funcion para abrir un formulario de mantenimiento
-Sub GetMenuMantenimiento(mnuTitle, tableName, idCol, descripCol)
-       
-  Set lFrm = gcn.AhoraProceso("NewfrmMantenimiento", False, GCN)
-  lFrm.Form.NombreForm = "Frm_" & Replace(mnuTitle, " ", "_")
-
-  With lFrm.Grid("Mantenimiento")
-     If Not .Preparada Then
-       .Agregar = True
-       .Editar = True
-       .Eliminar = True
-       .CargaObjetos = False
-       .EditarPorObjeto = False
-       .AgregaColumna idCol, 800, "Código"
-       .AgregaColumna descripCol, 2600, "Descripción"
-       .ColumnaEscalada = descripCol
-       .From = tableName
-     End If
-    .Refresca = True  
-  End With
- 
-  lFrm.form.Width = 10000
-  lFrm.Form.Caption = mnuTitle
-  lFrm.Carga, False, 4
-
-End Sub
+        If lResult.Eof = False Then
+            GForm.Controls("txtPesoResma").Text = lResult("PesoResma")
+            GForm.Controls("txtKilosTeoricos").Text = lResult("KilosTeoricos")
+            GForm.Controls("txtKilosCortados").Text = lResult("KilosCortados")
+            GForm.Controls("txtMerma").Text = lResult("Merma")
+            GForm.Controls("txtPorcentajeMerma").Text = lResult("PorcentajeMerma")
+            GForm.Controls("txtBobinasUsadas").Text = lResult("Bobinas_Utilizadas")
+            GForm.Controls("txtTotalPalets").Text = lResult("Total_Palets")
+            GForm.Controls("txtTotalResmas").Text = lResult("Total_Resmas")
+            GForm.Controls("txtTotalPaletsEnviados").Text = lResult("Total_PaletsEnviados")
+            GForm.Controls("txtTotalPaletsPendientes").Text = lResult("Total_PaletsPendientes")
+            GForm.Controls("txtPrecioTrabajo").Text = lResult("PrecioTrabajo")
+        Else
+            VaciarCamposResumen()
+        End If
+    Else
+        VaciarCamposResumen()
+    End If
+End Sub ' MostrarDatosResumen

@@ -18,7 +18,7 @@ Sub Initialize()
     GForm.Caption = "Asignar Envios"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left, GForm.Top + 500, GForm.Width + 3775, GForm.Height - 600
+    GForm.Move GForm.Left - 2000, GForm.Top + 500, GForm.Width + 5000, GForm.Height - 600
 
      With GForm.Botonera
         .ActivarScripts = True
@@ -47,12 +47,13 @@ Sub Initialize()
         .AgregaColumna "PedidoCliente", 1500, "Pedido", True
         .AgregaColumna "IdCliente", 1000, "Cliente", True
         .AgregaColumna "Cliente", 3000, "Nombre", True
+        .AgregaColumna "ResmasPorPalet", 1200, "Resmas/Palets", True
         .AgregaColumna "PaletsCortados", 1200, "Palets", True
-        .AgregaColumna "PaletsEnviados", 1200, "Palets enviados", True
         .AgregaColumna "PaletsPendientes", 1200, "Palets pendientes", True
+        .AgregaColumna "PaletsEnviados", 1200, "Palets enviados", True
         .AgregaColumna "PaletsAsignar", 1200, "Asignar palets"
         .FROM = "PERS_TEMP_Asignar_Envios"
-        .Move 210, 200, 13800, 4000 
+        .Move 210, 200, 15000, 4000 
         .Refresca = True
         .Visible = True
     End With

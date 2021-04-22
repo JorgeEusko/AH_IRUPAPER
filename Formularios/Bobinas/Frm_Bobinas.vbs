@@ -444,7 +444,7 @@ Sub Botonera_BeforeExecute(aBotonera, aBoton, aCancel)
             GForm.Controls("txtMetros").Text = CStr((kilos / (ancho * gramaje)) * 100000)
         ElseIf gForm.Controls("txtMetros").Text > 0 Then
             metros = CDbl(gForm.Controls("txtMetros").Text)
-            GForm.Controls("txtKilos").Text = CStr((ancho * gramaje * (metros / 10000)))
+            GForm.Controls("txtKilos").Text = CStr((ancho * gramaje * (metros / 100000)))
         End If
     End If  
 End Sub

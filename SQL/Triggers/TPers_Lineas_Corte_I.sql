@@ -25,6 +25,24 @@ BEGIN
 	WHERE IdTrabajo = @v_IdTrabajo
 		AND IdLinea = @v_IdLinea
 		AND IdLineaCorte =  @v_IdLineaCorte
+
+	-- Si el trabajo no tiene el estado 'Procesando', actualiza el estado
+	IF NOT EXISTS (SELECT 1 FROM Pers_Trabajos WHERE IdTrabajo = @v_IdTrabajo AND IdEstado = 2) BEGIN
+
+		UPDATE Pers_Trabajos
+		SET IdEstado = 2
+		WHERE IdTrabajo = @v_IdTrabajo;
+
+	END
+
+	-- Si la linea de trabajo no tiene el estado 'Procesando', actualiza el estado
+	IF NOT EXISTS (SELECT 1 FROM Pers_Trabajos_Lineas WHERE IdTrabajo = @v_IdTrabajo AND IdLinea = @v_IdLinea AND IdEstado = 2) BEGIN
+
+		UPDATE Pers_Trabajos_Lineas
+		SET IdEstado = 2
+		WHERE IdTrabajo = @v_IdTrabajo AND IdLinea = @v_IdLinea;
+
+	END
 END
 GO
 
