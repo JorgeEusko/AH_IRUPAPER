@@ -573,41 +573,23 @@ Sub Menu_AfterExecute(aMenu, aMenuItem)
 End Sub ' Menu_AfterExecute
 
 Sub Grid_MenuAfterExecute(aGrid,aMenuItem)
+    Dim idTrabajo, idLinea, RefTrabajoCli
+
+    idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
+    idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
+
     If aMenuItem.Name = "botVerBobinas" Then
-        idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
-        idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
+        RefTrabajoCli = GForm.Controls("GrdTrabajoLineas").GetValue("RefTrabajoCliente")
 
         If idTrabajo <> "" And idLinea <> "" Then
-            Set lFrm = gcn.AhoraProceso("NewfrmMantenimiento", False, GCN)
-            lFrm.Form.NombreForm = "Frm_Bobinas_de_Lineas_de_Trabajo"
-
-            With lFrm.Grid("Bobinas de Lineas de Trabajo")
-                If Not .Preparada Then
-                    .Agregar = False
-                    .Editar = True
-                    .Eliminar = False
-                    .CargaObjetos = False
-                    .EditarPorObjeto = False
-                    .AgregaColumna "IdLinea", 600, "Linea", True
-                    .AgregaColumna "RefBobina", 1200, "Ref. Bobina", True
-                    .AgregaColumna "NumBobina", 800, "Num. Bobina", True
-                    .AgregaColumna "Utilizada", 800, "Utilizada", False
-                    .From = "PERS_Trabajos_Lineas_Bobinas"
-                    .Where = "WHERE IdTrabajo = " & idTrabajo & " AND IdLinea = " & idLinea
-                End If
-                .Refresca = True  
-            End With
-            
-            lFrm.form.Width = 6000
-            lFrm.Form.Caption = "Bobinas de Lineas de Trabajo"
-            lFrm.Carga, False, 4
+            Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
+            lFrmGen.Tag = CStr(idTrabajo) & "," & CStr(idLinea) & "," & CStr(RefTrabajoCli)
+            lFrmGen.Carga "Frm_Trabajos_Lineas_Bobinas", GForm, True
+            MostrarDatosResumen()
         Else
             GCN.Obj.ShowMsgBox("No ha seleccionado ninguna línea de trabajo")
         End If
     ElseIf aMenuItem.Name = "botVerCostesEnvio" Then
-        idTrabajo = GForm.Controls("GrdTrabajoLineas").GetValue("IdTrabajo")
-        idLinea = GForm.Controls("GrdTrabajoLineas").GetValue("IdLinea")
-
         If idTrabajo <> "" And idLinea <> "" Then
             Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
             lFrmGen.Tag = CStr(idTrabajo) & "," & CStr(idLinea)

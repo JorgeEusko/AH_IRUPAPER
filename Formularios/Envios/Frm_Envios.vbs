@@ -283,6 +283,7 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
             lFrmGen.Tag = CStr(idCliente) & "," & CStr(idDirEnvio) & "," & CStr(idEnvio)
             lFrmGen.Carga "Frm_AsignarEnvios", GForm, True
 
+            GForm.Controls("GrdEnviosLineas").WHERE = "WHERE IdEnvio = " & GForm.Controls("txtIdEnvio").Text
             GForm.Controls("GrdEnviosLineas").Refrescar
         Else
             GCN.Obj.ShowMsgBox("Debe seleccionar un cliente y unadirección de envío.")

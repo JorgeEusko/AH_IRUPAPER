@@ -24,7 +24,7 @@ BEGIN
 		SET PB.IdEstado  = 3
 		FROM PERS_Trabajos_Lineas_Bobinas AS PTLB
 			JOIN Pers_Bobinas AS PB ON PTLB.IdBobina = PB.IdBobina
-		WHERE IdTrabajo = @v_IdTrabajo AND IdLinea = @v_IdLinea AND Utilizada = 1
+		WHERE IdTrabajo = @v_IdTrabajo AND IdLinea = @v_IdLinea
 
 		-- Obtiene el total de lineas de trabajo para ese trabajo
 		SET @v_TotalLineas = (SELECT COUNT(*) FROM PERS_Trabajos_Lineas WHERE IdTrabajo = @v_IdTrabajo)

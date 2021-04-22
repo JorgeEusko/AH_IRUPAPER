@@ -1,6 +1,6 @@
-CREATE OR ALTER TRIGGER TPERS_Trabajos_Lineas_Bobinas_U
+CREATE OR ALTER TRIGGER TPERS_Trabajos_Lineas_Bobinas_I
 ON PERS_Trabajos_Lineas_Bobinas
-AFTER UPDATE
+AFTER INSERT
 AS
 BEGIN
 	DECLARE @v_IdBobina INT;
@@ -16,5 +16,5 @@ BEGIN
 END
 GO
 
-ENABLE TRIGGER TPERS_Trabajos_Lineas_Bobinas_U ON PERS_Trabajos_Lineas_Bobinas;  
+ENABLE TRIGGER TPERS_Trabajos_Lineas_Bobinas_I ON PERS_Trabajos_Lineas_Bobinas;  
 GO

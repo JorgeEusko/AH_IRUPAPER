@@ -20,7 +20,7 @@ Sub Initialize()
     ' Tamaño del formulario
     GForm.Move GForm.Left - 2000, GForm.Top + 500, GForm.Width + 5000, GForm.Height - 600
 
-     With GForm.Botonera
+    With GForm.Botonera
         .ActivarScripts = True
         .BotonesMantenimiento = 4
         .Boton("botGuardar").Visible = False
