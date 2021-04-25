@@ -123,15 +123,17 @@ Sub Initialize
         .Enabled = True
         .Eliminar = False
         .AgregaColumna "IdTrabajo", 0, "Código"
-        .AgregaColumna "IdLinea", 600, "Línea", True
-        .AgregaColumna "Total_Palets", 1200, "Palets", True
-        .AgregaColumna "Total_Resmas", 1200, "Resmas", True
+        .AgregaColumna "IdLinea", 0, "Línea", True
+        .AgregaColumna "IdLineaCorte", 600, "Línea", True
+        .AgregaColumna "Palets", 1200, "Palets", True
+        .AgregaColumna "Resmas", 1200, "Resmas", True
         .AgregaColumna "PesoResma", 1200, "Peso resma", True
+        .AgregaColumna "PesoPalet", 1200, "Peso palet", True
         .AgregaColumna "@EtIni", 1000, "Etiqueta Ini", True
         .AgregaColumna "@EtFin", 1000, "Etiqueta Fin", True
         .Campo("@EtIni").Sustitucion = "SELECT 1"
-        .Campo("@EtFin").Sustitucion = "SELECT @Total_Palets"
-        .FROM = "VPers_Trabajos_Lineas_Resumen"
+        .Campo("@EtFin").Sustitucion = "SELECT @Palets"
+        .FROM = "VPERS_Grid_Imprimir_Etiquetas"
         .Where = "WHERE IdTrabajo = " & idTrabajo & " AND IdLinea = " & idLinea
         .Refresca = True
         .Move 210, 2545, 8000, 3000 
@@ -195,7 +197,7 @@ End Sub ' Show
 Sub Grid_RowColChange(aGrid, LastRow, LastCol)
     If aGrid.Name = "GrdEtiquetas" Then
 
-        etiquetaFin = GForm.Controls("GrdEtiquetas").GetValue("Total_Palets")
+        etiquetaFin = GForm.Controls("GrdEtiquetas").GetValue("Palets")
 
         If etiquetaFin <> "" Then
             GForm.Controls("txtImprimirDesde").Text = 1
@@ -215,12 +217,13 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
         Set params = gcn.DameNewCollection
         params.Add CInt(GForm.Controls("GrdEtiquetas").GetValue("IdTrabajo"))
         params.Add CInt(GForm.Controls("GrdEtiquetas").GetValue("IdLinea"))
+        params.Add CInt(GForm.Controls("GrdEtiquetas").GetValue("IdLineaCorte"))
         params.Add CInt(GForm.Controls("txtImprimirDesde").Text)
         params.Add CInt(GForm.Controls("txtImprimirHasta").Text)
 
         GCN.EjecutaStoreCol "PPERS_Crear_Etiquetas_Palets", params
 
-        textoWhere = "WHERE PERS_TEMP_Etiquetas_Palets.IdTrabajo = " & GForm.Controls("GrdEtiquetas").GetValue("IdTrabajo") & " AND PERS_TEMP_Etiquetas_Palets.IdLinea =" & GForm.Controls("GrdEtiquetas").GetValue("IdLinea")
+        textoWhere = "WHERE PERS_TEMP_Etiquetas_Palets.IdTrabajo = " & GForm.Controls("GrdEtiquetas").GetValue("IdTrabajo") & " AND PERS_TEMP_Etiquetas_Palets.IdLinea =" & GForm.Controls("GrdEtiquetas").GetValue("IdLinea") & " AND PERS_TEMP_Etiquetas_Palets.IdLineaCorte = " & GForm.Controls("GrdEtiquetas").GetValue("IdLineaCorte")
         
         gCn.AhoraProceso "ImprimirFichero", False, GCN, Nothing, "\PERSONALIZADOS\EUSKO Etiquetas.rpt","", textoWhere
     End If

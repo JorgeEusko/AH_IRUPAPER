@@ -629,6 +629,7 @@ End Sub ' Grid_RowColChange
 Sub Grid_AfterUpdate(aGrid)
     If aGrid.Name = "GrdLineasCorte" Then
         MostrarDatosResumen()
+        GForm.Controls("GrdTrabajoLineas").Refrescar
     End If
 End Sub ' Grid_AfterUpdate
 
