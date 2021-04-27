@@ -29,7 +29,9 @@ BEGIN
            ,[TotalPaletsEnviados]
            ,[Precio]
            ,[FechaPrimerEnvio]
-           ,[IdDoc])
+           ,[IdDoc]
+		   ,Marcar
+		   ,PedidoGenerado)
 		SELECT 
 			@v_IdEnvio,
 			@v_IdEnvioLinea,
@@ -44,7 +46,9 @@ BEGIN
 			VTLR.Total_PaletsEnviados,
 			LPCA.Precio,
 			PE.Fecha AS FechaPrimerEnvio,
-			@v_IdDoc
+			@v_IdDoc,
+			0,
+			0
 		FROM PERS_Envios AS PE
 			JOIN PERS_Envios_Lineas AS PEL ON PE.IdEnvio = PEL.IdEnvio
 			JOIN PERS_Trabajos_Lineas AS PTL ON PEL.IdTrabajo = PTL.IdTrabajo AND PEL.IdTrabajoLinea = PTL.IdLinea

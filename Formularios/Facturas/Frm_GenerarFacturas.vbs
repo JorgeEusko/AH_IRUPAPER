@@ -7,6 +7,8 @@ Sub Initialize()
     ' Tamaño del formulario
     GForm.Move GForm.Left, GForm.Top + 500, GForm.Width + 4000, GForm.Height
 
+    GCN.ExecuteSql "UPDATE PERS_TEMP_Generar_Facturas SET Marcar = 0 WHERE PedidoGenerado = 0"
+
     With GForm.Botonera
         .ActivarScripts = True
         .BotonesMantenimiento = 4
@@ -153,38 +155,45 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
         fechaDesde = GForm.Controls("txtFechaDesde").Text
         fechaHasta = GForm.Controls("txtFechaHasta").Text
 
+        textoWhere = "WHERE PedidoGenerado = 0 "
         ' Filtra el valor del cliente
         If Len(idCliente) > 0 Then
-            textoWhere = "WHERE IdCliente = '" & idCliente & "' "
+            textoWhere = textoWhere & " AND IdCliente = '" & idCliente & "' "
         End If
 
         ' Filtra el valor de fecha de inicio
-        If Len(fechaDesde) > 0 And Len(textoWhere) > 0 Then
+        If Len(fechaDesde) > 0 Then
             textoWhere = textoWhere & " AND Fecha >= '" & fechaDesde & "' "
-        ElseIf Len(fechaDesde) > 0 Then
-            textoWhere = "WHERE Fecha >= '" & fechaDesde &"' "
         End If
         
         ' Filtra el valor de fecha de fin
-        If Len(fechaHasta) > 0 And Len(textoWhere) > 0 Then
+        If Len(fechaHasta) > 0 Then
             textoWhere = textoWhere & " AND Fecha <= '" & fechaHasta & "' "
-        ElseIf Len(fechaHasta) > 0 Then
-            textoWhere = "WHERE Fecha >= '" & fechaHasta & "' "
         End If
 
         ' Aplica el filtro
-        If Len(textoWhere) > 0 Then
-            GForm.Controls("GrdGenerarFacturasLineas").Where = textoWhere
-            GForm.Controls("GrdGenerarFacturasLineas").Refrescar
-        End If
+        GForm.Controls("GrdGenerarFacturasLineas").Where = textoWhere
+        GForm.Controls("GrdGenerarFacturasLineas").Refrescar
         
     ElseIf aBoton.Name = "btnGenerar" Then
         Set params = gcn.DameNewCollection
+        params.Add GForm.Controls("cboIdCliente").Value
+        params.Add 0
+
+        gCn.Obj.HourglassAll(True)
+        
         If GCN.EjecutaStoreCol("PPERS_Generar_Envios_Pedidos_I", params) Then
             GCN.Obj.ShowMsgBox("Pedidos generados con exito.")
+            
+            Set lObj = GCN.Obj.DameObjeto("Pedidos", "Where IdPedido = " & params.Item(2))
+            lObj.Show, True
         Else
             GCN.Obj.ShowMsgBox("Ha ocurrido un error al crear los pedidos.")
         End If
+        
+        gCn.Obj.HourglassAll(False)
+
+        GForm.Controls("GrdGenerarFacturasLineas").Refrescar
     End If
 
 End Sub ' Botonera_AfterExecute

@@ -11,7 +11,7 @@ BEGIN
     FOR 
     SELECT IdEnvio, IdEnvioLinea, IdCliente
 	FROM PERS_TEMP_Generar_Facturas
-	WHERE Marcar = 1 AND IdEnvio NOT IN (SELECT IdEnvio FROM Conf_Pedidos_Cli WHERE IdEnvio IS NOT NULL);
+	WHERE Marcar = 1 AND PedidoGenerado = 0
 
 	OPEN cur_generar_facturas;
 

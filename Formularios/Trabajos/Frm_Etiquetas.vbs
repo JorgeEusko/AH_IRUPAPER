@@ -212,7 +212,7 @@ End Sub ' Grid_RowColChange
 
 Sub Botonera_AfterExecute(aBotonera, aBoton)
     If aBoton.Name = "btnImprimirEtiquetas" Then
-        Dim textoWhere
+        Dim textoWhere, idTrabajo, idCliente
 
         Set params = gcn.DameNewCollection
         params.Add CInt(GForm.Controls("GrdEtiquetas").GetValue("IdTrabajo"))
@@ -225,6 +225,13 @@ Sub Botonera_AfterExecute(aBotonera, aBoton)
 
         textoWhere = "WHERE PERS_TEMP_Etiquetas_Palets.IdTrabajo = " & GForm.Controls("GrdEtiquetas").GetValue("IdTrabajo") & " AND PERS_TEMP_Etiquetas_Palets.IdLinea =" & GForm.Controls("GrdEtiquetas").GetValue("IdLinea") & " AND PERS_TEMP_Etiquetas_Palets.IdLineaCorte = " & GForm.Controls("GrdEtiquetas").GetValue("IdLineaCorte")
         
-        gCn.AhoraProceso "ImprimirFichero", False, GCN, Nothing, "\PERSONALIZADOS\EUSKO Etiquetas.rpt","", textoWhere
+        idTrabajo = CInt(GForm.Controls("GrdEtiquetas").GetValue("IdTrabajo"))
+        idCliente = GCN.DameValorCampo("SELECT IdCliente FROM Pers_Trabajos WHERE IdTrabajo = " & idTrabajo, "IdCliente")
+
+        If idCliente = "00003" Then
+            gCn.AhoraProceso "ImprimirFichero", False, GCN, Nothing, "\PERSONALIZADOS\EUSKO Etiquetas V2.rpt","", textoWhere
+        Else
+            gCn.AhoraProceso "ImprimirFichero", False, GCN, Nothing, "\PERSONALIZADOS\EUSKO Etiquetas.rpt","", textoWhere
+        End If
     End If
 End Sub ' Botonera_AfterExecute

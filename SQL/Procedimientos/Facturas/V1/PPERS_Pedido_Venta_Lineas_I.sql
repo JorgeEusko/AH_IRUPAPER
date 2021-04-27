@@ -3,7 +3,12 @@
     @prm_IdArticulo T_Id_Articulo,
     @prm_Cantidad T_Decimal_2,
 	@prm_Precio T_Decimal_2,
-	@prm_IdLista T_Id_Lista
+	@prm_IdLista T_Id_Lista,
+	@prm_IdEnvio INT,
+	@prm_IdEnvioLinea INT,
+	@prm_RefTrabajo VARCHAR(255),
+    @prm_IdPedidoCliente VARCHAR(100),
+    @prm_IdPedidoClienteFinal VARCHAR(100)
 AS  
 BEGIN  
     --Declarar las variables  
@@ -163,6 +168,15 @@ BEGIN
 					@IdDoc                 = NULL, 
 					@Usuario               = 'dbo', 
 					@FechaInsertUpdate     = @v_FechaHoy
+
+		-- Establece los datos del lincaje entre el pedido, los datos de envío y del trabajo
+		UPDATE Conf_Pedidos_Cli_Lineas
+		SET IdEnvio = @prm_IdEnvio,
+			IdEnvioLinea = @prm_IdEnvioLinea,
+			RefTrabajo = @prm_RefTrabajo,
+			IdPedidoCliente = @prm_IdPedidoCliente,
+			IdPedidoClienteFinal = @prm_IdPedidoClienteFinal
+		WHERE IdPedido = @prm_IdPedido AND IdLinea = @v_IdLinea;
 
 		COMMIT TRANSACTION
     END TRY  

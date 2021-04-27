@@ -121,7 +121,23 @@ BEGIN
 			@v_PrecioTrabajo DECIMAL(38, 14),
 			@v_IdArticuloPalet T_Id_Articulo,
 			@v_UnidadesPalet DECIMAL(38, 14),
-			@v_PrecioPalet DECIMAL(38, 14);
+			@v_PrecioPalet DECIMAL(38, 14),
+            @v_PERS_RefTrabajo VARCHAR(255),
+            @v_PERS_IdPedidoCliente VARCHAR(100),
+            @v_PERS_IdPedidoClienteFinal VARCHAR(100),
+            @v_CostesPalets BIT;
+
+        -- Obtenemos los datos del trabajo relacionado con el envio
+
+        SELECT
+            @v_PERS_RefTrabajo = PTL.RefTrabajoCliente,
+            @v_PERS_IdPedidoCliente = PT.IdPedidoCliente,
+	        @v_PERS_IdPedidoClienteFinal = PT.IdPedidoClienteFinal,
+            @v_CostesPalets = PTL.CostePaletFacturable
+        FROM PERS_Trabajos AS PT 
+            JOIN PERS_Trabajos_Lineas AS PTL ON PT.IdTrabajo = PTL.IdTrabajo
+            JOIN PERS_Envios_Lineas AS PEL ON PTL.IdTrabajo = PEL.IdTrabajo AND PTL.IdLinea = PEL.IdTrabajoLinea
+        WHERE PEL.IdEnvio = @prm_IdEnvio AND PEL.IdEnvioLinea = @prm_IdEnvioLinea;
 
 		-- Obtenemos los articulos y sus unidades
 		SELECT
@@ -148,11 +164,64 @@ BEGIN
 		WHERE LPCA.IdLista = 0 AND LPCA.IdArticulo = @v_IdArticuloPalet
 
         -- Crea la linea de trabajo
-        EXEC PPERS_Pedido_Venta_Lineas_I @v_IdPedido, @v_IdArticuloTrabajo, @v_UnidadesTrabajo, @v_PrecioTrabajo, @v_IdLista
+        EXEC PPERS_Pedido_Venta_Lineas_I @v_IdPedido, @v_IdArticuloTrabajo, @v_UnidadesTrabajo, @v_PrecioTrabajo, @v_IdLista, @prm_IdEnvio, @prm_IdEnvioLinea, @v_PERS_RefTrabajo, @v_PERS_IdPedidoCliente, @v_PERS_IdPedidoClienteFinal
 
-        -- Crea la linea de palet
-        EXEC PPERS_Pedido_Venta_Lineas_I @v_IdPedido, @v_IdArticuloPalet, @v_UnidadesPalet, @v_PrecioPalet, 0
-
+        -- Crea la linea de palet si en Costes_Palets la linea esta marcada como facturable
+        IF @v_CostesPalets = 1 BEGIN
+            EXEC PPERS_Pedido_Venta_Lineas_I @v_IdPedido, @v_IdArticuloPalet, @v_UnidadesPalet, @v_PrecioPalet, 0, @prm_IdEnvio, @prm_IdEnvioLinea, @v_PERS_RefTrabajo, @v_PERS_IdPedidoCliente, @v_PERS_IdPedidoClienteFinal
+        END
+        -- Si no esta marcada como facturable, crea una salida de almacen
+        -- y descuenta los palets del stock
+        ELSE BEGIN
+            EXEC pAlmacen_Hist_Mov_I 
+                    @IdAlmacen         = 0, 
+                    @FechaMovimiento   = @v_FechaActual, 
+                    @IdArticulo        = @v_IdArticuloPalet, 
+                    @IdMovimiento      = 8, 
+                    @Lote              = NULL, 
+                    @FechaLote         = @v_FechaActual, 
+                    @IdEmbalaje        = NULL, 
+                    @IdAlbaran         = NULL, 
+                    @Cantidad          = @v_UnidadesPalet, 
+                    @IdCliente         = NULL, 
+                    @IdProveedor       = NULL, 
+                    @IdAlmacenTraspaso = NULL, 
+                    @Descrip           = 'Salida de palets', 
+                    @Valor             = 0, 
+                    @UnidadesStock     = 0, 
+                    @Precio            = 0, 
+                    @FechaValor        = @v_FechaActual, 
+                    @IdAlbaranEnvio    = NULL, 
+                    @IdContrato        = NULL, 
+                    @IdParte           = NULL, 
+                    @IdUbicacion       = '0', 
+                    @IdTipoObjeto      = 0, 
+                    @IdDocObjeto       = NULL, 
+                    @Objeto            = NULL, 
+                    @IdDocActEnv       = 0, 
+                    @P1                = NULL, 
+                    @P2                = NULL, 
+                    @P3                = NULL, 
+                    @P4                = NULL, 
+                    @P5                = NULL, 
+                    @P6                = NULL, 
+                    @P7                = NULL, 
+                    @P8                = NULL, 
+                    @P9                = NULL, 
+                    @P10               = NULL, 
+                    @IdDoc             = NULL, 
+                    @Usuario           = 'dbo', 
+                    @FechaInsertUpdate = @v_FechaActual
+        END
+        
+        UPDATE PERS_TEMP_Generar_Facturas 
+        SET PedidoGenerado = 1
+        WHERE Marcar = 1 
+            AND PedidoGenerado = 0
+            AND IdEnvio = @prm_IdEnvio
+            AND IdEnvioLinea = @prm_IdEnvioLinea
+            AND IdCliente = @prm_IdCliente;
+            
         RETURN 1;
     END TRY  
 
