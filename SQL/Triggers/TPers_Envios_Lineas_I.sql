@@ -6,7 +6,11 @@ BEGIN
 	DECLARE 
 		@v_IdEnvio INT,
 		@v_IdEnvioLinea INT,
-		@v_IdDoc T_Id_Doc;
+		@v_IdDoc T_Id_Doc,
+		@v_IdTrabajo INT,
+		@v_IdTrabajoLinea INT,
+		@v_LineasCorteEnviadas INT,
+		@v_LineasCorteTotales INT;
 
 	-- Recupera la referencia de la l�nea de trabajo
 	SELECT 
@@ -15,6 +19,7 @@ BEGIN
 		@v_IdDoc = I.IdDoc
 	FROM inserted as I;
 
+	-- Agrega la linea de envio a la linea de trabajo
 	INSERT INTO [dbo].[PERS_TEMP_Generar_Facturas]
            ([IdEnvio]
            ,[IdEnvioLinea]
@@ -57,6 +62,24 @@ BEGIN
 			JOIN Clientes_Datos_Economicos AS CDE ON PE.Cliente = CDE.IdCliente
 			JOIN Listas_Precios_Cli_Art AS LPCA ON PTL.IdArticulo = LPCA.IdArticulo AND LPCA.IdLista = CDE.IdLista
 		WHERE PEL.IdEnvio = @v_IdEnvio AND PEL.IdEnvioLinea = @v_IdEnvioLinea; 
+
+		-- Comprobacion de si la linea de trabajo tiene que estar indicada como 'Terminada'
+		SELECT @v_LineasCorteEnviadas = COUNT(*)
+		FROM PERS_Envios_Lineas
+		WHERE IdTrabajo = @v_IdTrabajo AND IdTrabajoLinea = @v_IdTrabajoLinea;
+
+		SELECT @v_LineasCorteTotales = COUNT(*)
+		FROM PERS_Trabajos_Lineas
+		WHERE IdTrabajo = 1 AND IdLinea = 1;
+
+		-- Si la cantidad de lineas enviadaas es igual a la cantidad de lineas de corte totales,
+		-- hay que marcar la linea de trabajo como terminada
+		IF @v_LineasCorteEnviadas = @v_LineasCorteTotales BEGIN
+			UPDATE PERS_Trabajos_Lineas
+			SET IdEstado = 3
+			WHERE IdTrabajo = 1 AND IdLinea = 1;
+		END
+
 END
 GO
 

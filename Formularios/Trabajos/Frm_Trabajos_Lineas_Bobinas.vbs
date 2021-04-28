@@ -3,7 +3,7 @@ Sub Initialize()
     GForm.Caption = "Enlazar Bobinas"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left + 2250, GForm.Top, GForm.Width - 4300, GForm.Height - 400
+    GForm.Move GForm.Left + 2250, GForm.Top, GForm.Width + 300, GForm.Height - 400
 
     Dim idTrabajo, idLinea, refTrabajo
     If GForm.Tag <> "" Then
@@ -54,11 +54,14 @@ Sub Initialize()
         .AgregaColumna "IdBobina", 0, "IdBobina", True
         .AgregaColumna "RefBobina", 1200, "Ref. Bobina", True
         .AgregaColumna "NumBobina", 1200, "Num. Bobina", True
+        .AgregaColumna "Ancho", 1350, "Ancho (cm)", True, "", False, "#,##0.00"
+        .AgregaColumna "Gramaje", 1350, "Gramaje (Gr/m2)", True, "", False, "#,##0.00"
+        .AgregaColumna "IdCalidad", 2200, "Calidad", True, "SELECT IdCalidad, Descrip FROM PERS_Tipos_Calidad_Papel", False, "", False, "SELECT IdCalidad, Descrip FROM PERS_Tipos_Calidad_Papel"
         .AgregaColumna "Asignada", 1200, "Asignada", True
         .AgregaColumna "Marcar", 1200, "Marcar", False
         .From = "PERS_Bobinas"
         .WHERE = "WHERE RefTrabajo = '" & refTrabajo & "'"
-        .Move 100, 445, 6200, 4000 
+        .Move 100, 445, 10800, 4000 
         .Refresca = True
         .Visible = True
     End With

@@ -8,7 +8,7 @@ Sub Initialize()
 
     With GForm.Botonera
         .ActivarScripts = True
-        .BotonAdd "Imprimir Etiquetas", "botImprimirEtiquetas", "", 0, False, 123
+        .BotonAdd "Etiquetas", "botImprimirEtiquetas", "", 0, False, 123
     End With ' Botonera
 
     Set PnlObservaciones = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlObservaciones", GForm.Controls("PnlMain"))
@@ -629,7 +629,7 @@ End Sub ' Grid_RowColChange
 Sub Grid_AfterUpdate(aGrid)
     If aGrid.Name = "GrdLineasCorte" Then
         MostrarDatosResumen()
-        GForm.Controls("GrdTrabajoLineas").Refrescar
+        'GForm.Controls("GrdTrabajoLineas").Refrescar
     End If
 End Sub ' Grid_AfterUpdate
 
@@ -672,7 +672,7 @@ Sub MostrarDatosResumen()
         lSQL = "SELECT TOP 1 * FROM VPers_Trabajos_Lineas_Resumen WHERE IdTrabajo = " & idTrabajo & " AND IdLinea = " & idLinea 
         Set lResult = gcn.OpenResultSet(lSQL, 2, 3)
 
-        If lResult.Eof = False Then
+        If lResult.EOF = False Then
             GForm.Controls("txtPesoResma").Text = lResult("PesoResma")
             GForm.Controls("txtKilosTeoricos").Text = lResult("KilosTeoricos")
             GForm.Controls("txtKilosCortados").Text = lResult("KilosCortados")

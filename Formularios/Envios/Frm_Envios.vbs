@@ -66,6 +66,22 @@ Sub Initialize
         .Visible = True 
     End With ' txtFecha
 
+    Set txtNumEnvioCliente = GForm.Controls.Add("AhoraOCX.TextoUsuario", "txtNumEnvioCliente", GForm.Controls("PnlMain"))
+    With txtNumEnvioCliente 
+        .AplicaEstilo
+        .CaptionControl = "Código Cli." 
+        .CaptionVisible = True      
+        .CaptionWidth = 1150 
+        .Enabled = False 
+        .Formato = "Sin decimales" 
+        .ObjOrigen = "EObjeto"
+        .ObjPOrigen = "NumEnvioCliente"
+        .Move 4500, 240, 2000, 300 
+        .Necesario = True
+        .TipoDato =  "Numeric"
+        .Visible = True 
+    End With ' txtIdEnvio
+
     Set cboIdCliente = GForm.Controls.Add("AhoraOCX.ComboUsuario", "cboIdCliente", GForm.Controls("PnlMain"))
     With cboIdCliente 
         .AplicaEstilo
@@ -270,6 +286,17 @@ Sub Combo_AfterUpdate(aCombo)
     End If
 End Sub ' Combo_AfterUpdate
 
+Sub Botonera_BeforeExecute(aBotonera, aBoton, aCancel)
+    Dim idCliente 
+    idCliente = GForm.Controls("cboIdCliente").Value
+
+    If aBoton.Name = "botGuardar" Then
+        If Len(idCliente) > 0 And GForm.EObjeto.ObjGlobal.Nuevo Then
+            GForm.Controls("txtNumEnvioCliente").Text = GCN.DameValorCampo("SELECT ISNULL(MAX(NumEnvioCliente), 0) + 1 AS NuevoCodigoEnvio FROM Pers_Envios WHERE Cliente = '" & idCliente & "'", "NuevoCodigoEnvio")
+        End If
+    End If
+End Sub ' Botonera_BeforeExecute
+
 Sub Botonera_AfterExecute(aBotonera, aBoton)
     If aBoton.Name = "btnAsignarEnvios" Then
         Dim idCliente, idDirEnvio, idEnvio
@@ -297,9 +324,11 @@ End Sub ' Botonera_AfterExecute
 
 Sub CargarEnvio()
     If GForm.EObjeto.ObjGlobal.Nuevo Then
-        GForm.Controls("GrdEnviosLineas").Enabled = False
         GForm.Controls("txtIdEnvio").Text = GCN.DameValorCampo ("SELECT ISNULL(MAX(IdEnvio), 0) + 1 AS NuevoCodigoEnvio FROM Pers_Envios", "NuevoCodigoEnvio")
-        GForm.Controls("txtFecha").Text = CStr(Now())  
+        GForm.Controls("txtFecha").Text = CStr(Now()) 
+        GForm.Controls("GrdEnviosLineas").WHERE = "WHERE 1 = 0"
+        GForm.Controls("GrdEnviosLineas").Refrescar 
+        GForm.Controls("GrdEnviosLineas").Enabled = False
     Else
         GForm.Controls("GrdEnviosLineas").Enabled = True
         GForm.Controls("GrdEnviosLineas").WHERE = "WHERE IdEnvio = " & GForm.Controls("txtIdEnvio").Text
