@@ -332,9 +332,13 @@ Sub CrearBobinas()
 
         If GCN.EjecutaStoreCol("PPERS_Recepcionar_Bobinas", params) Then
             GCN.Obj.ShowMsgBox("Bobinas creadas con éxito.")
+            
+            Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
+            lFrmGen.Tag = RefTrabajo
+            lFrmGen.Carga "Frm_Grid_Bobinas_Creadas", GForm, True
 
-            Set lCol = Gcn.Obj.DameColeccion("Bobinas", "WHERE RefTrabajo = '" & RefTrabajo & "'", , False)
-            lCol.Show()
+            'Set lCol = Gcn.Obj.DameColeccion("Bobinas", "WHERE RefTrabajo = '" & RefTrabajo & "'", , False)
+            'lCol.Show()
         Else
             GCN.Obj.ShowMsgBox("Error al crear las bobinas.")
         End If
