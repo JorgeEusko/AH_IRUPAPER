@@ -4,11 +4,12 @@ Sub Initialize
     GForm.Caption = "Envío"
 
     ' Tamaño del formulario
-    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 5000, GForm.Height - 2000
+    GForm.Move GForm.Left - 2500, GForm.Top + 500, GForm.Width + 5000, GForm.Height - 500
 
     With GForm.Botonera
         .ActivarScripts = True
         .BotonAdd "Asignar envios", "btnAsignarEnvios", , 0, True, 123
+        .Boton("botImprimir").Visible = False
     End With ' Botonera
 
     Set PnlObservaciones1 = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlObservaciones1", GForm.Controls("PnlMain"))
@@ -270,6 +271,36 @@ Sub Initialize
         .Move 210, 2100, 12000, 3000 
     End With
 
+    Set cntImprimirAlbaranEnvio = GForm.Controls.Add("AhoraOCX.cntBotonera", "cntImprimirAlbaranEnvio", GForm.Controls("PnlMain"))
+    With cntImprimirAlbaranEnvio
+        .ActivarScripts = True
+        .BotonAdd "Imprimir Albarán de Envío", "btnImprimirAlbaranEnvio", "", 0, False
+        .HabilitaBotones
+        .Move 9000, 5400, 3000, 300
+        .SeguridadObjeto = True
+        .Visible = True
+    End With ' cntImprimirAlbaranEnvio
+
+    Set cntImprimirCMR = GForm.Controls.Add("AhoraOCX.cntBotonera", "cntImprimirCMR", GForm.Controls("PnlMain"))
+    With cntImprimirCMR
+        .ActivarScripts = True
+        .BotonAdd "Imprimir Listado CMR", "btnImprimirCMR", "", 0, False
+        .HabilitaBotones
+        .Move 9000, 5800, 3000, 300
+        .SeguridadObjeto = True
+        .Visible = True
+    End With ' cntImprimirCMR
+
+    Set cntImprimirCorte = GForm.Controls.Add("AhoraOCX.cntBotonera", "cntImprimirCorte", GForm.Controls("PnlMain"))
+    With cntImprimirCorte
+        .ActivarScripts = True
+        .BotonAdd "Imprimir Listado de Corte", "btnImprimirCorte", "", 0, False
+        .HabilitaBotones
+        .Move 9000, 6200, 3000, 300
+        .SeguridadObjeto = True
+        .Visible = True
+    End With ' cntImprimirCorte
+
 End Sub ' Initialize
 
 Sub CargaObjeto()
@@ -287,13 +318,25 @@ Sub Combo_AfterUpdate(aCombo)
 End Sub ' Combo_AfterUpdate
 
 Sub Botonera_BeforeExecute(aBotonera, aBoton, aCancel)
-    Dim idCliente 
+    Dim idCliente, textoWhere
     idCliente = GForm.Controls("cboIdCliente").Value
 
     If aBoton.Name = "botGuardar" Then
         If Len(idCliente) > 0 And GForm.EObjeto.ObjGlobal.Nuevo Then
             GForm.Controls("txtNumEnvioCliente").Text = GCN.DameValorCampo("SELECT ISNULL(MAX(NumEnvioCliente), 0) + 1 AS NuevoCodigoEnvio FROM Pers_Envios WHERE Cliente = '" & idCliente & "'", "NuevoCodigoEnvio")
         End If
+    ElseIf aBoton.Name = "btnImprimirAlbaranEnvio" Then
+        If idCliente = "00003" Then
+            gCn.AhoraProceso "ImprimirFichero", False, GCN, Nothing, "\PERSONALIZADOS\EUSKO Albaran Envio Zikuñaga.rpt","", "WHERE Pers_Envios.IdEnvio = " & CStr(GForm.Controls("txtIdEnvio").Text)
+        Else
+            Set lFrmGen =  GCN.AhoraProceso("AhoraScripts.DameFrmGenerico", False)
+            lFrmGen.Tag = GForm.Controls("txtIdEnvio").Text
+            lFrmGen.Carga "Frm_ImprimirAlbEnvioGeneral", GForm, True
+        End If
+    ElseIf aBoton.Name = "btnImprimirCMR" Then
+        gCn.AhoraProceso "ImprimirFichero", False, GCN, Nothing, "\PERSONALIZADOS\EUSKO Informe CMR.rpt","", "WHERE Pers_Envios.IdEnvio = " & CStr(GForm.Controls("txtIdEnvio").Text)
+    ElseIf aBoton.Name = "btnImprimirCorte" Then
+        gCn.AhoraProceso "ImprimirFichero", False, GCN, Nothing, "\PERSONALIZADOS\EUSKO Informe de Corte.rpt","", "WHERE Pers_Envios.IdEnvio = " & CStr(GForm.Controls("txtIdEnvio").Text)
     End If
 End Sub ' Botonera_BeforeExecute
 

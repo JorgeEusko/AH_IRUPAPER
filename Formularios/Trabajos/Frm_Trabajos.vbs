@@ -8,7 +8,8 @@ Sub Initialize()
 
     With GForm.Botonera
         .ActivarScripts = True
-        .BotonAdd "Etiquetas", "botImprimirEtiquetas", "", 0, False, 123
+        .Boton("botImprimir").Caption = "Imprimir OE"
+        .BotonAdd "Imprimir Etiquetas", "botImprimirEtiquetas", "", 0, False, 123
     End With ' Botonera
 
     Set PnlObservaciones = GForm.Controls.Add("AhoraOCX.cntPanel", "PnlObservaciones", GForm.Controls("PnlMain"))
