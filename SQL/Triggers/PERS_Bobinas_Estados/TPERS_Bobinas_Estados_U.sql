@@ -1,0 +1,18 @@
+CREATE OR ALTER TRIGGER TPERS_Bobinas_Estados_U
+ON PERS_Bobinas_Estados
+FOR UPDATE
+AS 
+BEGIN
+    IF EXISTS(SELECT 1 FROM inserted) BEGIN
+        IF UPDATE(IdEstado)
+        BEGIN
+            PRINT 'IMPOSIBLE ACTUALIZAR ESTADO DE BOBINA'
+            ROLLBACK TRAN
+            RETURN
+        END
+    END
+END
+GO
+
+ALTER TABLE PERS_Bobinas_Estados ENABLE TRIGGER TPERS_Bobinas_Estados_U
+GO

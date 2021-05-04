@@ -1,0 +1,18 @@
+CREATE OR ALTER TRIGGER TPERS_Tipos_Calidad_Papel_U
+ON PERS_Tipos_Calidad_Papel
+FOR UPDATE
+AS 
+BEGIN
+    IF EXISTS(SELECT 1 FROM inserted) BEGIN
+        IF UPDATE(IdCalidad)
+        BEGIN
+            PRINT 'IMPOSIBLE ACTUALIZAR TIPO DE CALIDAD DE PAPEL'
+            ROLLBACK TRAN
+            RETURN
+        END
+    END
+END
+GO
+
+ALTER TABLE PERS_Tipos_Calidad_Papel ENABLE TRIGGER TPERS_Tipos_Calidad_Papel_U
+GO
